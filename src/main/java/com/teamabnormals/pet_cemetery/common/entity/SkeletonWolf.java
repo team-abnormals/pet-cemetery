@@ -1,4 +1,4 @@
-package com.teamabnormals.pet_cemetery.common.entity.skeleton;
+package com.teamabnormals.pet_cemetery.common.entity;
 
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.server.level.ServerLevel;

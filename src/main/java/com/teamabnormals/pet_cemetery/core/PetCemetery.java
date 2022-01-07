@@ -20,8 +20,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
@@ -32,29 +30,16 @@ public class PetCemetery {
 
 	public PetCemetery() {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-
-		REGISTRY_HELPER.register(bus);
 		MinecraftForge.EVENT_BUS.register(this);
 
-		bus.addListener(this::commonSetup);
-		bus.addListener(this::clientSetup);
+		REGISTRY_HELPER.register(bus);
+
 		bus.addListener(this::dataSetup);
-
 		bus.addListener(this::registerRenderers);
-		bus.addListener(this::registerLayers);
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(this::registerItemColors));
-	}
-
-	private void commonSetup(FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> {
-
-		});
-	}
-
-	private void clientSetup(FMLClientSetupEvent event) {
-		event.enqueueWork(() -> {
-
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			bus.addListener(this::registerLayers);
+			bus.addListener(this::registerItemColors);
 		});
 	}
 
@@ -86,6 +71,7 @@ public class PetCemetery {
 		event.getItemColors().register((stack, color) -> color > 0 ? -1 : ((ForgottenCollarItem) stack.getItem()).getColor(stack), PCItems.FORGOTTEN_COLLAR.get());
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	private void registerLayers(EntityRenderersEvent.AddLayers event) {
 		event.getSkins().forEach(skin -> {
 			PlayerRenderer renderer = event.getSkin(skin);

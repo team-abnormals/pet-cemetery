@@ -1,8 +1,7 @@
 package com.teamabnormals.pet_cemetery.core.registry;
 
 import com.teamabnormals.blueprint.core.util.registry.EntitySubRegistryHelper;
-import com.teamabnormals.pet_cemetery.common.entity.skeleton.*;
-import com.teamabnormals.pet_cemetery.common.entity.zombie.*;
+import com.teamabnormals.pet_cemetery.common.entity.*;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -15,7 +14,6 @@ import net.minecraftforge.registries.RegistryObject;
 @Mod.EventBusSubscriber(modid = PetCemetery.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PCEntityTypes {
 	public static final EntitySubRegistryHelper HELPER = PetCemetery.REGISTRY_HELPER.getEntitySubHelper();
-
 
 	public static final RegistryObject<EntityType<ZombieWolf>> ZOMBIE_WOLF = HELPER.createLivingEntity("zombie_wolf", ZombieWolf::new, MobCategory.CREATURE, 0.6F, 0.85F);
 	public static final RegistryObject<EntityType<ZombieCat>> ZOMBIE_CAT = HELPER.createLivingEntity("zombie_cat", ZombieCat::new, MobCategory.CREATURE, 0.6F, 0.7F);

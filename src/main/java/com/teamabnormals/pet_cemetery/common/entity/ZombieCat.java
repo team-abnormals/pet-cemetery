@@ -1,4 +1,4 @@
-package com.teamabnormals.pet_cemetery.common.entity.zombie;
+package com.teamabnormals.pet_cemetery.common.entity;
 
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,12 +26,12 @@ import net.minecraftforge.event.ForgeEventFactory;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class ZombieWolf extends Wolf {
-	private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(ZombieWolf.class, EntityDataSerializers.BOOLEAN);
+public class ZombieCat extends Cat {
+	private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(ZombieCat.class, EntityDataSerializers.BOOLEAN);
 	private int conversionTime;
 	private UUID converstionStarter;
 
-	public ZombieWolf(EntityType<? extends ZombieWolf> type, Level worldIn) {
+	public ZombieCat(EntityType<? extends ZombieCat> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -41,15 +41,25 @@ public class ZombieWolf extends Wolf {
 	}
 
 	@Override
-	public ZombieWolf getBreedOffspring(ServerLevel world, AgeableMob entity) {
-		ZombieWolf wolf = PCEntityTypes.ZOMBIE_WOLF.get().create(world);
-		UUID uuid = this.getOwnerUUID();
-		if (uuid != null) {
-			wolf.setOwnerUUID(uuid);
-			wolf.setTame(true);
+	public ZombieCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
+		ZombieCat cat = PCEntityTypes.ZOMBIE_CAT.get().create(world);
+		if (this.random.nextBoolean()) {
+			cat.setCatType(this.getCatType());
+		} else {
+			cat.setCatType(cat.getCatType());
 		}
 
-		return wolf;
+		if (this.isTame()) {
+			cat.setOwnerUUID(this.getOwnerUUID());
+			cat.setTame(true);
+			if (this.random.nextBoolean()) {
+				cat.setCollarColor(this.getCollarColor());
+			} else {
+				cat.setCollarColor(cat.getCollarColor());
+			}
+		}
+
+		return cat;
 	}
 
 	@Override
@@ -79,7 +89,7 @@ public class ZombieWolf extends Wolf {
 		if (!this.level.isClientSide && this.isAlive() && this.isConverting()) {
 			int i = this.getConversionProgress();
 			this.conversionTime -= i;
-			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.WOLF, (timer) -> this.conversionTime = timer)) {
+			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.CAT, (timer) -> this.conversionTime = timer)) {
 				this.cureZombie((ServerLevel) this.level);
 			}
 		}
@@ -135,24 +145,25 @@ public class ZombieWolf extends Wolf {
 	}
 
 	private void cureZombie(ServerLevel world) {
-		Wolf wolfEntity = this.copyEntityData();
-		wolfEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(wolfEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
-		wolfEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+		Cat catEntity = this.copyEntityData();
+		catEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(catEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
+		catEntity.setCatType(this.getCatType());
+		catEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
 		if (!this.isSilent()) {
 			world.levelEvent(null, 1027, this.blockPosition(), 0);
 		}
 
-		ForgeEventFactory.onLivingConvert(this, wolfEntity);
+		ForgeEventFactory.onLivingConvert(this, catEntity);
 	}
 
-	public Wolf copyEntityData() {
-		Wolf wolf = this.convertTo(EntityType.WOLF, false);
-		wolf.setCollarColor(this.getCollarColor());
-		wolf.setTame(this.isTame());
-		wolf.setOrderedToSit(this.isOrderedToSit());
+	public Cat copyEntityData() {
+		Cat cat = this.convertTo(EntityType.CAT, false);
+		cat.setCollarColor(this.getCollarColor());
+		cat.setTame(this.isTame());
+		cat.setOrderedToSit(this.isOrderedToSit());
 		if (this.getOwner() != null)
-			wolf.setOwnerUUID(this.getOwner().getUUID());
-		return wolf;
+			cat.setOwnerUUID(this.getOwner().getUUID());
+		return cat;
 	}
 
 	private int getConversionProgress() {

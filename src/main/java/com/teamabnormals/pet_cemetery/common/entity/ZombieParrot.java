@@ -1,4 +1,4 @@
-package com.teamabnormals.pet_cemetery.common.entity.zombie;
+package com.teamabnormals.pet_cemetery.common.entity;
 
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,12 +26,12 @@ import net.minecraftforge.event.ForgeEventFactory;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class ZombieCat extends Cat {
-	private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(ZombieCat.class, EntityDataSerializers.BOOLEAN);
+public class ZombieParrot extends Parrot {
+	private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(ZombieParrot.class, EntityDataSerializers.BOOLEAN);
 	private int conversionTime;
 	private UUID converstionStarter;
 
-	public ZombieCat(EntityType<? extends ZombieCat> type, Level worldIn) {
+	public ZombieParrot(EntityType<? extends ZombieParrot> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -41,25 +41,20 @@ public class ZombieCat extends Cat {
 	}
 
 	@Override
-	public ZombieCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
-		ZombieCat cat = PCEntityTypes.ZOMBIE_CAT.get().create(world);
+	public ZombieParrot getBreedOffspring(ServerLevel world, AgeableMob entity) {
+		ZombieParrot parrot = PCEntityTypes.ZOMBIE_PARROT.get().create(world);
 		if (this.random.nextBoolean()) {
-			cat.setCatType(this.getCatType());
+			parrot.setVariant(this.getVariant());
 		} else {
-			cat.setCatType(cat.getCatType());
+			parrot.setVariant(parrot.getVariant());
 		}
 
 		if (this.isTame()) {
-			cat.setOwnerUUID(this.getOwnerUUID());
-			cat.setTame(true);
-			if (this.random.nextBoolean()) {
-				cat.setCollarColor(this.getCollarColor());
-			} else {
-				cat.setCollarColor(cat.getCollarColor());
-			}
+			parrot.setOwnerUUID(this.getOwnerUUID());
+			parrot.setTame(true);
 		}
 
-		return cat;
+		return parrot;
 	}
 
 	@Override
@@ -89,7 +84,7 @@ public class ZombieCat extends Cat {
 		if (!this.level.isClientSide && this.isAlive() && this.isConverting()) {
 			int i = this.getConversionProgress();
 			this.conversionTime -= i;
-			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.CAT, (timer) -> this.conversionTime = timer)) {
+			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.PARROT, (timer) -> this.conversionTime = timer)) {
 				this.cureZombie((ServerLevel) this.level);
 			}
 		}
@@ -105,11 +100,9 @@ public class ZombieCat extends Cat {
 				if (!player.getAbilities().instabuild) {
 					itemstack.shrink(1);
 				}
-
 				if (!this.level.isClientSide) {
 					this.startConverting(player.getUUID(), this.random.nextInt(2401) + 3600);
 				}
-
 				return InteractionResult.SUCCESS;
 			} else {
 				return InteractionResult.CONSUME;
@@ -145,25 +138,24 @@ public class ZombieCat extends Cat {
 	}
 
 	private void cureZombie(ServerLevel world) {
-		Cat catEntity = this.copyEntityData();
-		catEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(catEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
-		catEntity.setCatType(this.getCatType());
-		catEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+		Parrot parrotEntity = this.copyEntityData();
+		parrotEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(parrotEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
+		parrotEntity.setVariant(this.getVariant());
+		parrotEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
 		if (!this.isSilent()) {
 			world.levelEvent(null, 1027, this.blockPosition(), 0);
 		}
 
-		ForgeEventFactory.onLivingConvert(this, catEntity);
+		ForgeEventFactory.onLivingConvert(this, parrotEntity);
 	}
 
-	public Cat copyEntityData() {
-		Cat cat = this.convertTo(EntityType.CAT, false);
-		cat.setCollarColor(this.getCollarColor());
-		cat.setTame(this.isTame());
-		cat.setOrderedToSit(this.isOrderedToSit());
+	public Parrot copyEntityData() {
+		Parrot parrot = this.convertTo(EntityType.PARROT, false);
+		parrot.setTame(this.isTame());
+		parrot.setOrderedToSit(this.isOrderedToSit());
 		if (this.getOwner() != null)
-			cat.setOwnerUUID(this.getOwner().getUUID());
-		return cat;
+			parrot.setOwnerUUID(this.getOwner().getUUID());
+		return parrot;
 	}
 
 	private int getConversionProgress() {

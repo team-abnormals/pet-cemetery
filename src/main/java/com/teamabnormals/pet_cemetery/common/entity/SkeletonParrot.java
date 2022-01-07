@@ -1,4 +1,4 @@
-package com.teamabnormals.pet_cemetery.common.entity.skeleton;
+package com.teamabnormals.pet_cemetery.common.entity;
 
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -6,35 +6,30 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.level.Level;
 
-public class SkeletonCat extends Cat {
+public class SkeletonParrot extends Parrot {
 
-	public SkeletonCat(EntityType<? extends SkeletonCat> type, Level worldIn) {
+	public SkeletonParrot(EntityType<? extends SkeletonParrot> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
-	public SkeletonCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
-		SkeletonCat cat = PCEntityTypes.SKELETON_CAT.get().create(world);
+	public SkeletonParrot getBreedOffspring(ServerLevel world, AgeableMob entity) {
+		SkeletonParrot parrot = PCEntityTypes.SKELETON_PARROT.get().create(world);
 		if (this.random.nextBoolean()) {
-			cat.setCatType(this.getCatType());
+			parrot.setVariant(this.getVariant());
 		} else {
-			cat.setCatType(cat.getCatType());
+			parrot.setVariant(parrot.getVariant());
 		}
 
 		if (this.isTame()) {
-			cat.setOwnerUUID(this.getOwnerUUID());
-			cat.setTame(true);
-			if (this.random.nextBoolean()) {
-				cat.setCollarColor(this.getCollarColor());
-			} else {
-				cat.setCollarColor(cat.getCollarColor());
-			}
+			parrot.setOwnerUUID(this.getOwnerUUID());
+			parrot.setTame(true);
 		}
 
-		return cat;
+		return parrot;
 	}
 
 	@Override
