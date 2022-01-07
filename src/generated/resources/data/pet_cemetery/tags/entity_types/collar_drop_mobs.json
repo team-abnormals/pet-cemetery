@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:wolf",
+    "minecraft:cat",
+    "minecraft:parrot",
+    "pet_cemetery:zombie_wolf",
+    "pet_cemetery:zombie_cat",
+    "pet_cemetery:zombie_parrot"
+  ]
+}

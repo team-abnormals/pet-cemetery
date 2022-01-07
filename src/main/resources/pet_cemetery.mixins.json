@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.teamabnormals.pet_cemetery.core.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "refmap": "pet_cemetery.refmap.json",
+  "mixins": [
+    "ZombieHorseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

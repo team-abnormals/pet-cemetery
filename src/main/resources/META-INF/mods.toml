@@ -1,0 +1,39 @@
+modLoader = "javafml"
+loaderVersion = "[32,)"
+issueTrackerURL = "https://github.com/team-abnormals/pet-cemetery/issues"
+license = "https://github.com/team-abnormals/pet-cemetery/blob/main/LICENSE.txt"
+
+[[mods]]
+    modId = "pet_cemetery"
+    version = "${file.jarVersion}"
+    logoFile = "logo.png"
+    itemIcon = "pet_cemetery:forgotten_collar"
+    configBackground = "minecraft:textures/block/stone.png"
+    authors = "Team Abnormals"
+    credits = "bageldotjpg, hatsondogs, Rye"
+    displayURL = "https://www.teamabnormals.com/mods/pet-cemetery"
+    displayName = "Pet Cemetery"
+    description = '''
+    Template description.
+    '''
+
+[[dependencies.pet_cemetery]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.18.1,1.19)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.pet_cemetery]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "[39.0.0,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.pet_cemetery]]
+    modId = "blueprint"
+    mandatory = true
+    versionRange = "[5.0.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
