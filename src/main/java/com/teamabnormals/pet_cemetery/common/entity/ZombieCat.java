@@ -133,6 +133,7 @@ public class ZombieCat extends Cat {
 	}
 
 	@OnlyIn(Dist.CLIENT)
+	@Override
 	public void handleEntityEvent(byte id) {
 		if (id == 16) {
 			if (!this.isSilent()) {

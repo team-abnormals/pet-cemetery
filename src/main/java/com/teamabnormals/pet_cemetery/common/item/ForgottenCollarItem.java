@@ -63,7 +63,7 @@ public class ForgottenCollarItem extends Item {
 		LivingEntity entity = event.getEntityLiving();
 		EntityType<?> type = entity.getType();
 
-		if (type.is(PCEntityTypeTags.COLLAR_DROP_MOBS)) {
+		if (type.is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR)) {
 			ItemStack collar = new ItemStack(PCItems.FORGOTTEN_COLLAR.get());
 			CompoundTag tag = collar.getOrCreateTag();
 

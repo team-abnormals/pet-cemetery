@@ -1,17 +1,24 @@
 package com.teamabnormals.pet_cemetery.core.registry;
 
 import com.teamabnormals.blueprint.core.util.registry.EntitySubRegistryHelper;
-import com.teamabnormals.pet_cemetery.common.entity.*;
+import com.teamabnormals.pet_cemetery.common.entity.SkeletonCat;
+import com.teamabnormals.pet_cemetery.common.entity.SkeletonParrot;
+import com.teamabnormals.pet_cemetery.common.entity.SkeletonWolf;
+import com.teamabnormals.pet_cemetery.common.entity.ZombieCat;
+import com.teamabnormals.pet_cemetery.common.entity.ZombieParrot;
+import com.teamabnormals.pet_cemetery.common.entity.ZombieWolf;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = PetCemetery.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = PetCemetery.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PCEntityTypes {
 	public static final EntitySubRegistryHelper HELPER = PetCemetery.REGISTRY_HELPER.getEntitySubHelper();
 

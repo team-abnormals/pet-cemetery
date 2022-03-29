@@ -123,6 +123,7 @@ public class ZombieWolf extends Wolf {
 	}
 
 	@OnlyIn(Dist.CLIENT)
+	@Override
 	public void handleEntityEvent(byte id) {
 		if (id == 16) {
 			if (!this.isSilent()) {

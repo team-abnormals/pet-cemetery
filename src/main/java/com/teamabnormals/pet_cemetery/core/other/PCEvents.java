@@ -20,7 +20,7 @@ public class PCEvents {
 	public static void onLivingSpawned(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 
-		if (entity.getType().is(PCEntityTypeTags.COLLAR_DROP_MOBS) && entity instanceof TamableAnimal pet) {
+		if (entity.getType().is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR) && entity instanceof TamableAnimal pet) {
 			List<Goal> goalsToRemove = Lists.newArrayList();
 			pet.goalSelector.availableGoals.forEach((goal) -> {
 				if (goal.getGoal() instanceof FloatGoal)
