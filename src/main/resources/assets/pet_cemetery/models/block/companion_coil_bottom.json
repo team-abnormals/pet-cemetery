@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "pet_cemetery:block/companion_chamber_bottom",
+    "bottom": "pet_cemetery:block/companion_chamber_bottom",
+    "side": "pet_cemetery:block/companion_chamber_side"
+  }
+}

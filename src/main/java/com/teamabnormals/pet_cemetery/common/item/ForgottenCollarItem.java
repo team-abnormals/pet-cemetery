@@ -1,8 +1,11 @@
 package com.teamabnormals.pet_cemetery.common.item;
 
 import com.google.common.collect.Maps;
+import com.teamabnormals.pet_cemetery.common.block.CompanionCoilBlock;
+import com.teamabnormals.pet_cemetery.common.block.state.properties.CoilType;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
+import com.teamabnormals.pet_cemetery.core.registry.PCBlocks;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.ChatFormatting;
@@ -114,8 +117,8 @@ public class ForgottenCollarItem extends Item {
 		BlockState state = world.getBlockState(pos);
 		ItemStack stack = context.getItemInHand();
 
-		if (state.is(Blocks.BEEHIVE) && state.getValue(BeehiveBlock.HONEY_LEVEL) == 5 && world.canSeeSky(pos.above()) && world.isNight()) {
-			BlockPos offsetPos = pos.relative(state.getValue(BeehiveBlock.FACING));
+		BlockPos offsetPos = pos.above(3);
+		if (state.is(PCBlocks.COMPANION_COIL.get()) && state.getValue(CompanionCoilBlock.COIL_TYPE) == CoilType.BOTTOM && state.getValue(CompanionCoilBlock.CHARGE) == 10 && world.canSeeSky(offsetPos) && world.isNight()) {
 			if (!world.getBlockState(offsetPos).getCollisionShape(world, offsetPos).isEmpty())
 				return InteractionResult.FAIL;
 
@@ -181,7 +184,7 @@ public class ForgottenCollarItem extends Item {
 					}
 
 					if (returnEntity != null) {
-						world.setBlockAndUpdate(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, 0));
+						world.setBlockAndUpdate(pos, state.setValue(CompanionCoilBlock.CHARGE, 0));
 
 						LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(world);
 						bolt.moveTo(Vec3.atBottomCenterOf(entity.blockPosition()));
