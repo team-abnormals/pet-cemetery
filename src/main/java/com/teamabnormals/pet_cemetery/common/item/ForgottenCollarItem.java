@@ -197,7 +197,7 @@ public class ForgottenCollarItem extends Item {
 
 				if (pet == EntityType.CAT || pet == PCEntityTypes.ZOMBIE_CAT.get()) {
 					texture = Registry.CAT_VARIANT.byId(type).texture().toString().replace("minecraft:textures/entity/cat/", "");
-					texture = texture.replace(".png", "").replace("all_", "").replace("_", " ").concat(" ");
+					texture = texture.replace(".png", "").replace("_", " ").concat(" ");
 				}
 
 				if (pet == EntityType.PARROT || pet == PCEntityTypes.ZOMBIE_PARROT.get()) {
