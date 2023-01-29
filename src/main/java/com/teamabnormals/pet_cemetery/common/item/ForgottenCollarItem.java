@@ -229,8 +229,8 @@ public class ForgottenCollarItem extends Item {
 
 	public int getColor(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
-		float[] diffuseColors = DyeColor.byId(tag.getInt(COLLAR_COLOR)).getTextureDiffuseColors();
-		int color = ((((int) (diffuseColors[0] * 255.0F)) << 8) + ((int) (diffuseColors[1] * 255.0F)) << 8) + ((int) (diffuseColors[2] * 255.0F));
-		return tag.contains(COLLAR_COLOR) ? color : DyeableLeatherItem.DEFAULT_LEATHER_COLOR;
+		DyeColor color = tag.contains(COLLAR_COLOR) ? DyeColor.byId(tag.getInt(COLLAR_COLOR)) : DyeColor.RED;
+		float[] diffuseColors = color.getTextureDiffuseColors();
+		return ((((int) (diffuseColors[0] * 255.0F)) << 8) + ((int) (diffuseColors[1] * 255.0F)) << 8) + ((int) (diffuseColors[2] * 255.0F));
 	}
 }
