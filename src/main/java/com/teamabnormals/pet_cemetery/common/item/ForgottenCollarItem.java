@@ -10,16 +10,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.entity.ParrotRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -30,11 +29,13 @@ import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -115,16 +116,21 @@ public class ForgottenCollarItem extends Item {
 		}
 	}
 
-	public static void onLightningStrike(ItemEntity itemEntity, ServerLevel level) {
-		if (itemEntity.getItem().is(PCItems.FORGOTTEN_COLLAR.get())) {
-			Vec3 pos = itemEntity.position();
-			BlockPos blockPos = new BlockPos(pos);
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		Level level = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		BlockState state = level.getBlockState(pos);
 
-			ItemStack stack = itemEntity.getItem();
-			RandomSource random = level.random;
+		BlockPos offsetPos = pos.above();
+		if (level.dimensionType().respawnAnchorWorks() && state.is(Blocks.RESPAWN_ANCHOR) && state.getValue(RespawnAnchorBlock.CHARGE) > RespawnAnchorBlock.MIN_CHARGES) {
+			if (!level.getBlockState(offsetPos).getCollisionShape(level, offsetPos).isEmpty())
+				return InteractionResult.FAIL;
 
+			ItemStack stack = context.getItemInHand();
+			Player player = context.getPlayer();
 			CompoundTag tag = stack.getOrCreateTag();
-			Entity thrower = itemEntity.getThrowingEntity();
+			RandomSource random = level.getRandom();
 
 			if (tag.contains(PET_ID)) {
 				Map<EntityType<?>, EntityType<?>> UNDEAD_MAP = Util.make(Maps.newHashMap(), (map) -> {
@@ -142,13 +148,13 @@ public class ForgottenCollarItem extends Item {
 
 				if (entityType != null) {
 					Animal entity = (Animal) entityType.create(level);
-					UUID owner = tag.contains(OWNER_ID) ? UUID.fromString(tag.getString(OWNER_ID)) : thrower.getUUID();
+					UUID owner = tag.contains(OWNER_ID) ? UUID.fromString(tag.getString(OWNER_ID)) : player.getUUID();
 					DyeColor collarColor = DyeColor.byId(tag.getInt(COLLAR_COLOR));
 					int variant = tag.getInt(PET_VARIANT);
 					LivingEntity returnEntity = null;
 
 					entity.setBaby(tag.getBoolean(IS_CHILD));
-					entity.setPos(pos);
+					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
 					if (tag.contains(PET_NAME))
 						entity.setCustomName(Component.literal(tag.getString(PET_NAME)));
 
@@ -183,31 +189,26 @@ public class ForgottenCollarItem extends Item {
 						returnEntity = horseEntity;
 					}
 
-					for (int i = 0; i < 15; ++i) {
-						double d0 = random.nextGaussian() * 0.02D;
-						double d1 = random.nextGaussian() * 0.02D;
-						double d2 = random.nextGaussian() * 0.02D;
-						NetworkUtil.spawnParticle(ParticleTypes.HEART.writeToString(), entity.getRandomX(1.0D), entity.getRandomY(), entity.getRandomZ(1.0D), d0, d1, d2);
-					}
-
 					if (returnEntity != null) {
-						BlockState state = level.getBlockState(blockPos);
-						if (state.is(BlockTags.FIRE)) {
-							level.removeBlock(blockPos, false);
-						}
-						for (Direction direction : Direction.Plane.HORIZONTAL) {
-							state = level.getBlockState(blockPos.relative(direction));
-							if (state.is(BlockTags.FIRE)) {
-								level.removeBlock(blockPos.relative(direction), false);
-							}
+						level.setBlockAndUpdate(pos, state.setValue(RespawnAnchorBlock.CHARGE, state.getValue(RespawnAnchorBlock.CHARGE) - 1));
+
+						for (int i = 0; i < 15; ++i) {
+							double d0 = random.nextGaussian() * 0.05D;
+							double d1 = random.nextGaussian() * 0.05D;
+							double d2 = random.nextGaussian() * 0.05D;
+							NetworkUtil.spawnParticle(ParticleTypes.SMOKE.writeToString(), entity.getRandomX(1.0D), entity.getRandomY(), entity.getRandomZ(1.0D), d0, d1, d2);
 						}
 
+						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE, SoundSource.BLOCKS, 1.0F, 1.0F);
 						level.addFreshEntity(returnEntity);
-						itemEntity.discard();
+						if (!player.getAbilities().instabuild)
+							stack.shrink(1);
 					}
 				}
 			}
+			return InteractionResult.sidedSuccess(level.isClientSide());
 		}
+		return super.useOn(context);
 	}
 
 	@Override
