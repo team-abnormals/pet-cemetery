@@ -20,9 +20,9 @@ import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 public class PCEvents {
 
 	@SubscribeEvent
-	public static void onLivingSpawned(EntityJoinWorldEvent event) {
+	public static void onLivingSpawned(EntityJoinLevelEvent event) {
 		Entity entity = event.getEntity();
 
 		if (entity.getType().is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR) && entity instanceof TamableAnimal pet) {
@@ -49,7 +49,7 @@ public class PCEvents {
 
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		Level world = entity.getCommandSenderWorld();
 
 		if (entity instanceof Enemy && !world.isClientSide()) {
@@ -66,7 +66,7 @@ public class PCEvents {
 	}
 
 	@SubscribeEvent
-	public static void onEntityPlaceBlock(BlockEvent.EntityPlaceEvent event) {
+	public static void onEntityPlaceBlock(EntityPlaceEvent event) {
 		if (event.getEntity() != null) {
 			Level level = event.getEntity().getLevel();
 			BlockPos pos = event.getPos();

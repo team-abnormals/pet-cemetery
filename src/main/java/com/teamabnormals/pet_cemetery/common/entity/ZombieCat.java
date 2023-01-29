@@ -3,7 +3,9 @@ package com.teamabnormals.pet_cemetery.common.entity;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.*;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
@@ -11,7 +13,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -44,9 +49,9 @@ public class ZombieCat extends Cat {
 	public ZombieCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
 		ZombieCat cat = PCEntityTypes.ZOMBIE_CAT.get().create(world);
 		if (this.random.nextBoolean()) {
-			cat.setCatType(this.getCatType());
+			cat.setCatVariant(this.getCatVariant());
 		} else {
-			cat.setCatType(cat.getCatType());
+			cat.setCatVariant(cat.getCatVariant());
 		}
 
 		if (this.isTame()) {
@@ -148,7 +153,7 @@ public class ZombieCat extends Cat {
 	private void cureZombie(ServerLevel world) {
 		Cat catEntity = this.copyEntityData();
 		catEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(catEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
-		catEntity.setCatType(this.getCatType());
+		catEntity.setCatVariant(this.getCatVariant());
 		catEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
 		if (!this.isSilent()) {
 			world.levelEvent(null, 1027, this.blockPosition(), 0);
@@ -177,7 +182,7 @@ public class ZombieCat extends Cat {
 				for (int l = (int) this.getY() - 4; l < (int) this.getY() + 4 && j < 14; ++l) {
 					for (int i1 = (int) this.getZ() - 4; i1 < (int) this.getZ() + 4 && j < 14; ++i1) {
 						BlockState state = this.level.getBlockState(mutableBlockPos.set(k, l, i1));
-						if (state.is(BlockTags.CARPETS) || state.getBlock() instanceof BedBlock) {
+						if (state.is(BlockTags.WOOL_CARPETS) || state.getBlock() instanceof BedBlock) {
 							if (this.random.nextFloat() < 0.3F) {
 								++i;
 							}

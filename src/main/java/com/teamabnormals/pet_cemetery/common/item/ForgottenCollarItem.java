@@ -13,23 +13,30 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.entity.ParrotRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,7 +48,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = PetCemetery.MOD_ID)
 public class ForgottenCollarItem extends Item {
@@ -63,14 +72,14 @@ public class ForgottenCollarItem extends Item {
 
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		EntityType<?> type = entity.getType();
 
 		if (type.is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR)) {
 			ItemStack collar = new ItemStack(PCItems.FORGOTTEN_COLLAR.get());
 			CompoundTag tag = collar.getOrCreateTag();
 
-			tag.putString(ForgottenCollarItem.PET_ID, type.getRegistryName().toString());
+			tag.putString(ForgottenCollarItem.PET_ID, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
 			tag.putBoolean(ForgottenCollarItem.IS_CHILD, entity.isBaby());
 			if (entity.hasCustomName()) {
 				tag.putString(ForgottenCollarItem.PET_NAME, entity.getCustomName().getString());
@@ -85,7 +94,8 @@ public class ForgottenCollarItem extends Item {
 					}
 
 					if (entity instanceof Cat cat) {
-						tag.putInt(ForgottenCollarItem.PET_VARIANT, cat.getCatType());
+						//TODO: Fix Cat Variant
+						//tag.putInt(ForgottenCollarItem.PET_VARIANT, cat.getCatVariant());
 						tag.putInt(ForgottenCollarItem.COLLAR_COLOR, cat.getCollarColor().getId());
 					}
 
@@ -137,7 +147,7 @@ public class ForgottenCollarItem extends Item {
 					map.put(PCEntityTypes.ZOMBIE_PARROT.get(), PCEntityTypes.SKELETON_PARROT.get());
 				});
 
-				EntityType<?> entityType = UNDEAD_MAP.get(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tag.getString(PET_ID))));
+				EntityType<?> entityType = UNDEAD_MAP.get(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(tag.getString(PET_ID))));
 				System.out.println(entityType);
 
 				if (entityType != null) {
@@ -150,7 +160,7 @@ public class ForgottenCollarItem extends Item {
 					entity.setBaby(tag.getBoolean(IS_CHILD));
 					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
 					if (tag.contains(PET_NAME))
-						entity.setCustomName(new TextComponent(tag.getString(PET_NAME)));
+						entity.setCustomName(Component.literal(tag.getString(PET_NAME)));
 
 					if (entity instanceof TamableAnimal tameableEntity) {
 						tameableEntity.setTame(true);
@@ -162,7 +172,8 @@ public class ForgottenCollarItem extends Item {
 						}
 
 						if (tameableEntity instanceof Cat cat) {
-							cat.setCatType(variant);
+							//TODO: Fix Cat Variant
+							//cat.setCatVariant(variant);
 							cat.setCollarColor(collarColor);
 							returnEntity = cat;
 						}
@@ -212,20 +223,21 @@ public class ForgottenCollarItem extends Item {
 
 		if (tag.contains(PET_NAME)) {
 			String name = tag.getString(PET_NAME);
-			tooltip.add(new TextComponent(name).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+			tooltip.add(Component.literal(name).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
 		}
 
 		if (tag.contains(PET_ID)) {
 			String petID = tag.getString(PET_ID);
-			EntityType<?> pet = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(petID));
+			EntityType<?> pet = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(petID));
 
-			Component petType = new TranslatableComponent(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY);
+			Component petType = Component.translatable(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY);
 			if (tag.contains(PET_VARIANT)) {
 				int type = tag.getInt(PET_VARIANT);
 				String texture = "";
 
 				if (pet == EntityType.CAT || pet == PCEntityTypes.ZOMBIE_CAT.get()) {
-					texture = Cat.TEXTURE_BY_TYPE.get(type).toString().replace("minecraft:textures/entity/cat/", "");
+					//TODO: Fix Cat Variant
+					//texture = Cat.TEXTURE_BY_TYPE.get(type).toString().replace("minecraft:textures/entity/cat/", "");
 					texture = texture.replace(".png", "").replace("all_", "").replace("_", " ").concat(" ");
 				}
 
@@ -234,11 +246,11 @@ public class ForgottenCollarItem extends Item {
 					texture = texture.replace(".png", "").replace("_", "-").concat(" ");
 				}
 
-				petType = new TextComponent(WordUtils.capitalize(texture)).withStyle(ChatFormatting.GRAY).append(petType);
+				petType = Component.literal(WordUtils.capitalize(texture)).withStyle(ChatFormatting.GRAY).append(petType);
 			}
 
 			if (tag.getBoolean(IS_CHILD))
-				petType = new TranslatableComponent("tooltip." + PetCemetery.MOD_ID + ".baby").withStyle(ChatFormatting.GRAY).append(" ").append(petType);
+				petType = Component.translatable("tooltip." + PetCemetery.MOD_ID + ".baby").withStyle(ChatFormatting.GRAY).append(" ").append(petType);
 
 			tooltip.add(petType);
 		}

@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class PCItemModelProvider extends ItemModelProvider {
 
@@ -27,13 +28,13 @@ public class PCItemModelProvider extends ItemModelProvider {
 	}
 
 	private void generatedWithOverlay(ItemLike item) {
-		ResourceLocation itemName = item.asItem().getRegistryName();
+		ResourceLocation itemName = ForgeRegistries.ITEMS.getKey(item.asItem());
 		this.withExistingParent(itemName.getPath(), "item/generated")
 				.texture("layer0", new ResourceLocation(this.modid, "item/" + itemName.getPath()))
 				.texture("layer1", new ResourceLocation(this.modid, "item/" + itemName.getPath() + "_overlay"));
 	}
 
 	private void spawnEgg(ItemLike item) {
-		this.withExistingParent(item.asItem().getRegistryName().getPath(), "item/template_spawn_egg");
+		this.withExistingParent(ForgeRegistries.ITEMS.getKey(item.asItem()).getPath(), "item/template_spawn_egg");
 	}
 }

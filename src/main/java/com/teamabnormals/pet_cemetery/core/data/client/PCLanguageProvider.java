@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class PCLanguageProvider extends LanguageProvider {
@@ -26,15 +27,15 @@ public class PCLanguageProvider extends LanguageProvider {
 
 	private void add(Item... entries) {
 		for (Item entry : entries) {
-			if (entry.getRegistryName() != null)
-				this.add(entry, format(entry.getRegistryName()));
+			if (ForgeRegistries.ITEMS.getKey(entry) != null)
+				this.add(entry, format(ForgeRegistries.ITEMS.getKey(entry)));
 		}
 	}
 
 	private void add(EntityType<?>... entries) {
 		for (EntityType<?> entry : entries) {
-			if (entry.getRegistryName() != null)
-				this.add(entry, format(entry.getRegistryName()));
+			if (ForgeRegistries.ENTITY_TYPES.getKey(entry) != null)
+				this.add(entry, format(ForgeRegistries.ENTITY_TYPES.getKey(entry)));
 		}
 	}
 

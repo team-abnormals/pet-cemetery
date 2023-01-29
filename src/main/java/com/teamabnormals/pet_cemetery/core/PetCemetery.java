@@ -1,12 +1,7 @@
 package com.teamabnormals.pet_cemetery.core;
 
 import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.SkeletonCatRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.SkeletonParrotRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.SkeletonWolfRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.ZombieCatRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.ZombieParrotRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.ZombieWolfRenderer;
+import com.teamabnormals.pet_cemetery.client.renderer.entity.*;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.layers.UndeadParrotLayer;
 import com.teamabnormals.pet_cemetery.common.item.ForgottenCollarItem;
 import com.teamabnormals.pet_cemetery.core.data.client.PCItemModelProvider;
@@ -21,16 +16,16 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod(PetCemetery.MOD_ID)
 public class PetCemetery {
@@ -63,14 +58,9 @@ public class PetCemetery {
 		DataGenerator generator = event.getGenerator();
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
-		if (event.includeServer()) {
-			generator.addProvider(new PCEntityTypeTagsProvider(generator, helper));
-		}
-
-		if (event.includeClient()) {
-			generator.addProvider(new PCItemModelProvider(generator, helper));
-			generator.addProvider(new PCLanguageProvider(generator));
-		}
+		generator.addProvider(event.includeServer(), new PCEntityTypeTagsProvider(generator, helper));
+		generator.addProvider(event.includeClient(), new PCItemModelProvider(generator, helper));
+		generator.addProvider(event.includeClient(), new PCLanguageProvider(generator));
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -83,8 +73,8 @@ public class PetCemetery {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private void registerItemColors(ColorHandlerEvent.Item event) {
-		event.getItemColors().register((stack, color) -> color > 0 ? -1 : ((ForgottenCollarItem) stack.getItem()).getColor(stack), PCItems.FORGOTTEN_COLLAR.get());
+	private void registerItemColors(RegisterColorHandlersEvent.Item event) {
+		event.register((stack, color) -> color > 0 ? -1 : ((ForgottenCollarItem) stack.getItem()).getColor(stack), PCItems.FORGOTTEN_COLLAR.get());
 	}
 
 	@OnlyIn(Dist.CLIENT)

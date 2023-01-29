@@ -19,9 +19,9 @@ public class SkeletonCat extends Cat {
 	public SkeletonCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
 		SkeletonCat cat = PCEntityTypes.SKELETON_CAT.get().create(world);
 		if (this.random.nextBoolean()) {
-			cat.setCatType(this.getCatType());
+			cat.setCatVariant(this.getCatVariant());
 		} else {
-			cat.setCatType(cat.getCatType());
+			cat.setCatVariant(cat.getCatVariant());
 		}
 
 		if (this.isTame()) {

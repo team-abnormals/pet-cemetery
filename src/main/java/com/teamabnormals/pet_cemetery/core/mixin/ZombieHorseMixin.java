@@ -149,7 +149,7 @@ public abstract class ZombieHorseMixin extends AbstractHorse {
 				for (int l = (int) this.getY() - 4; l < (int) this.getY() + 4 && j < 14; ++l) {
 					for (int i1 = (int) this.getZ() - 4; i1 < (int) this.getZ() + 4 && j < 14; ++i1) {
 						BlockState state = this.level.getBlockState(blockpos$mutable.set(k, l, i1));
-						if (state.is(BlockTags.CARPETS) || state.getBlock() instanceof BedBlock) {
+						if (state.is(BlockTags.WOOL_CARPETS) || state.getBlock() instanceof BedBlock) {
 							if (this.random.nextFloat() < 0.3F) {
 								++i;
 							}
