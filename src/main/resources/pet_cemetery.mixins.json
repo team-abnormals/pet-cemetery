@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "refmap": "pet_cemetery.refmap.json",
-  "mixins": [],
+  "mixins": [
+    "PhantomSweepAttackGoalMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

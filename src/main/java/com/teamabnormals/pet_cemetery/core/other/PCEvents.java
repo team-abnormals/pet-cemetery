@@ -9,11 +9,11 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = PetCemetery.MOD_ID)
+@EventBusSubscriber(modid = PetCemetery.MOD_ID)
 public class PCEvents {
 
 	@SubscribeEvent
