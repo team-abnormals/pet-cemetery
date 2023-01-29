@@ -1,5 +1,6 @@
 package com.teamabnormals.pet_cemetery.common.entity;
 
+import com.teamabnormals.pet_cemetery.core.other.PCCriteriaTriggers;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +38,7 @@ import java.util.UUID;
 public class ZombieWolf extends Wolf {
 	private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(ZombieWolf.class, EntityDataSerializers.BOOLEAN);
 	private int conversionTime;
-	private UUID converstionStarter;
+	private UUID conversionStarter;
 
 	public ZombieWolf(EntityType<? extends ZombieWolf> type, Level worldIn) {
 		super(type, worldIn);
@@ -70,8 +72,8 @@ public class ZombieWolf extends Wolf {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("ConversionTime", this.isConverting() ? this.conversionTime : -1);
-		if (this.converstionStarter != null) {
-			compound.putUUID("ConversionPlayer", this.converstionStarter);
+		if (this.conversionStarter != null) {
+			compound.putUUID("ConversionPlayer", this.conversionStarter);
 		}
 	}
 
@@ -103,11 +105,11 @@ public class ZombieWolf extends Wolf {
 
 	@Override
 	public InteractionResult mobInteract(Player player, InteractionHand hand) {
-		ItemStack itemstack = player.getItemInHand(hand);
-		if (itemstack.getItem() == Items.GOLDEN_APPLE) {
+		ItemStack stack = player.getItemInHand(hand);
+		if (stack.getItem() == Items.GOLDEN_APPLE) {
 			if (this.hasEffect(MobEffects.WEAKNESS)) {
 				if (!player.getAbilities().instabuild) {
-					itemstack.shrink(1);
+					stack.shrink(1);
 				}
 
 				if (!this.level.isClientSide) {
@@ -128,7 +130,7 @@ public class ZombieWolf extends Wolf {
 	}
 
 	private void startConverting(@Nullable UUID conversionStarterIn, int conversionTimeIn) {
-		this.converstionStarter = conversionStarterIn;
+		this.conversionStarter = conversionStarterIn;
 		this.conversionTime = conversionTimeIn;
 		this.getEntityData().set(CONVERTING, true);
 		this.removeEffect(MobEffects.WEAKNESS);
@@ -150,14 +152,22 @@ public class ZombieWolf extends Wolf {
 	}
 
 	private void cureZombie(ServerLevel world) {
-		Wolf wolfEntity = this.copyEntityData();
-		wolfEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(wolfEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
-		wolfEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+		Wolf wolf = this.copyEntityData();
+		wolf.finalizeSpawn(world, world.getCurrentDifficultyAt(wolf.blockPosition()), MobSpawnType.CONVERSION, null, null);
+
+		if (this.conversionStarter != null) {
+			Player player = level.getPlayerByUUID(this.conversionStarter);
+			if (player instanceof ServerPlayer serverPlayer) {
+				PCCriteriaTriggers.CURED_ZOMBIE_PET.trigger(serverPlayer, this, wolf);
+			}
+		}
+
+		wolf.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
 		if (!this.isSilent()) {
 			world.levelEvent(null, 1027, this.blockPosition(), 0);
 		}
 
-		ForgeEventFactory.onLivingConvert(this, wolfEntity);
+		ForgeEventFactory.onLivingConvert(this, wolf);
 	}
 
 	public Wolf copyEntityData() {

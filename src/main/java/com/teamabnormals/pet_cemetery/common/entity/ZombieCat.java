@@ -1,5 +1,6 @@
 package com.teamabnormals.pet_cemetery.common.entity;
 
+import com.teamabnormals.pet_cemetery.core.other.PCCriteriaTriggers;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +38,7 @@ import java.util.UUID;
 public class ZombieCat extends Cat {
 	private static final EntityDataAccessor<Boolean> CONVERTING = SynchedEntityData.defineId(ZombieCat.class, EntityDataSerializers.BOOLEAN);
 	private int conversionTime;
-	private UUID converstionStarter;
+	private UUID conversionStarter;
 
 	public ZombieCat(EntityType<? extends ZombieCat> type, Level worldIn) {
 		super(type, worldIn);
@@ -80,8 +82,8 @@ public class ZombieCat extends Cat {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("ConversionTime", this.isConverting() ? this.conversionTime : -1);
-		if (this.converstionStarter != null) {
-			compound.putUUID("ConversionPlayer", this.converstionStarter);
+		if (this.conversionStarter != null) {
+			compound.putUUID("ConversionPlayer", this.conversionStarter);
 		}
 	}
 
@@ -138,7 +140,7 @@ public class ZombieCat extends Cat {
 	}
 
 	private void startConverting(@Nullable UUID conversionStarterIn, int conversionTimeIn) {
-		this.converstionStarter = conversionStarterIn;
+		this.conversionStarter = conversionStarterIn;
 		this.conversionTime = conversionTimeIn;
 		this.getEntityData().set(CONVERTING, true);
 		this.removeEffect(MobEffects.WEAKNESS);
@@ -159,16 +161,24 @@ public class ZombieCat extends Cat {
 		}
 	}
 
-	private void cureZombie(ServerLevel world) {
-		Cat catEntity = this.copyEntityData();
-		catEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(catEntity.blockPosition()), MobSpawnType.CONVERSION, null, null);
-		catEntity.setCatVariant(this.getCatVariant());
-		catEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
-		if (!this.isSilent()) {
-			world.levelEvent(null, 1027, this.blockPosition(), 0);
+	private void cureZombie(ServerLevel level) {
+		Cat cat = this.copyEntityData();
+		cat.finalizeSpawn(level, level.getCurrentDifficultyAt(cat.blockPosition()), MobSpawnType.CONVERSION, null, null);
+		cat.setCatVariant(this.getCatVariant());
+
+		if (this.conversionStarter != null) {
+			Player player = level.getPlayerByUUID(this.conversionStarter);
+			if (player instanceof ServerPlayer serverPlayer) {
+				PCCriteriaTriggers.CURED_ZOMBIE_PET.trigger(serverPlayer, this, cat);
+			}
 		}
 
-		ForgeEventFactory.onLivingConvert(this, catEntity);
+		cat.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+		if (!this.isSilent()) {
+			level.levelEvent(null, 1027, this.blockPosition(), 0);
+		}
+
+		ForgeEventFactory.onLivingConvert(this, cat);
 	}
 
 	public Cat copyEntityData() {

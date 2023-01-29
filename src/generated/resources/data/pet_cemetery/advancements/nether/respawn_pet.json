@@ -3,7 +3,7 @@
   "criteria": {
     "respawn_pet": {
       "conditions": {},
-      "trigger": "pet_cemetery:respawn_animal"
+      "trigger": "pet_cemetery:respawn_pet"
     }
   },
   "display": {

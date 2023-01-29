@@ -1,6 +1,5 @@
 package com.teamabnormals.pet_cemetery.core.mixin;
 
-import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Phantom;

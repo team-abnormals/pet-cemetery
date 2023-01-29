@@ -143,7 +143,7 @@ public class PetCollarItem extends Item {
 					if (stack.hasCustomHoverName())
 						entity.setCustomName(stack.getHoverName());
 
-					TamableAnimal returnEntity = null;
+					TamableAnimal respawnedEntity = null;
 					if (entity instanceof TamableAnimal tameableEntity) {
 
 						tameableEntity.setTame(true);
@@ -151,24 +151,24 @@ public class PetCollarItem extends Item {
 
 						if (tameableEntity instanceof Wolf wolf) {
 							wolf.setCollarColor(collarColor);
-							returnEntity = wolf;
+							respawnedEntity = wolf;
 						}
 
 						if (tameableEntity instanceof Cat cat) {
 							cat.setCatVariant(Registry.CAT_VARIANT.byId(variant));
 							cat.setCollarColor(collarColor);
-							returnEntity = cat;
+							respawnedEntity = cat;
 						}
 
 						if (tameableEntity instanceof Parrot parrot) {
 							parrot.setVariant(variant);
-							returnEntity = parrot;
+							respawnedEntity = parrot;
 						}
 					}
 
-					if (returnEntity != null) {
+					if (respawnedEntity != null) {
 						if (player instanceof ServerPlayer serverPlayer) {
-							PCCriteriaTriggers.RESPAWN_ANIMAL.trigger(serverPlayer, returnEntity);
+							PCCriteriaTriggers.RESPAWN_PET.trigger(serverPlayer, entity, respawnedEntity);
 						}
 
 						level.setBlockAndUpdate(pos, state.setValue(RespawnAnchorBlock.CHARGE, state.getValue(RespawnAnchorBlock.CHARGE) - 1));
@@ -181,7 +181,7 @@ public class PetCollarItem extends Item {
 						}
 
 						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE, SoundSource.BLOCKS, 1.0F, 1.0F);
-						level.addFreshEntity(returnEntity);
+						level.addFreshEntity(respawnedEntity);
 						if (!player.getAbilities().instabuild)
 							stack.shrink(1);
 					}
