@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "pet_cemetery:item/forgotten_collar",
-    "layer1": "pet_cemetery:item/forgotten_collar_overlay"
-  }
-}

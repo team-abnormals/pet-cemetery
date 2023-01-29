@@ -15,7 +15,7 @@ public class PhantomSweepAttackGoalMixin {
 
 	@Redirect(method = "canContinueToUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Cat;hiss()V"))
 	private void hiss(Cat cat) {
-		if (!(cat.getType().is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR)))
+		if (!(cat.getType().is(PCEntityTypeTags.DROPS_PET_COLLAR)))
 			cat.hiss();
 	}
 
@@ -23,7 +23,7 @@ public class PhantomSweepAttackGoalMixin {
 	private boolean isEmpty(List<Cat> cats) {
 		List<Cat> toRemove = Lists.newArrayList();
 		for (Cat cat : cats) {
-			if (cat.getType().is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR)) {
+			if (cat.getType().is(PCEntityTypeTags.DROPS_PET_COLLAR)) {
 				toRemove.add(cat);
 			}
 		}

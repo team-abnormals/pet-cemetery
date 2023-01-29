@@ -1,7 +1,7 @@
 package com.teamabnormals.pet_cemetery.core.registry;
 
 import com.teamabnormals.blueprint.core.util.registry.ItemSubRegistryHelper;
-import com.teamabnormals.pet_cemetery.common.item.ForgottenCollarItem;
+import com.teamabnormals.pet_cemetery.common.item.PetCollarItem;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class PCItems {
 	public static final ItemSubRegistryHelper HELPER = PetCemetery.REGISTRY_HELPER.getItemSubHelper();
 
-	public static final RegistryObject<Item> FORGOTTEN_COLLAR = HELPER.createItem("forgotten_collar", () -> new ForgottenCollarItem(new Item.Properties().stacksTo(1).fireResistant().tab(CreativeModeTab.TAB_MISC)));
+	public static final RegistryObject<Item> PET_COLLAR = HELPER.createItem("pet_collar", () -> new PetCollarItem(new Item.Properties().stacksTo(1).fireResistant().tab(CreativeModeTab.TAB_MISC)));
 
 	public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_WOLF_SPAWN_EGG = HELPER.createSpawnEggItem("zombie_wolf", PCEntityTypes.ZOMBIE_WOLF::get, 0x6A9D5A, 0x364430);
 	public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_CAT_SPAWN_EGG = HELPER.createSpawnEggItem("zombie_cat", PCEntityTypes.ZOMBIE_CAT::get, 0x4A7D52, 0x79AD69);

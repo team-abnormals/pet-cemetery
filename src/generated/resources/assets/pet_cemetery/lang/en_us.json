@@ -1,5 +1,5 @@
 {
-  "advancements.pet_cemetery.nether.respawn_pet.description": "Respawn a pet using a Forgotten Collar at a charged Respawn Anchor",
+  "advancements.pet_cemetery.nether.respawn_pet.description": "Respawn a pet using a Pet Collar at a charged Respawn Anchor",
   "advancements.pet_cemetery.nether.respawn_pet.title": "Pet Cemetery",
   "entity.pet_cemetery.skeleton_cat": "Skeleton Cat",
   "entity.pet_cemetery.skeleton_parrot": "Skeleton Parrot",
@@ -7,7 +7,7 @@
   "entity.pet_cemetery.zombie_cat": "Zombie Cat",
   "entity.pet_cemetery.zombie_parrot": "Zombie Parrot",
   "entity.pet_cemetery.zombie_wolf": "Zombie Wolf",
-  "item.pet_cemetery.forgotten_collar": "Forgotten Collar",
+  "item.pet_cemetery.pet_collar": "Pet Collar",
   "item.pet_cemetery.skeleton_cat_spawn_egg": "Skeleton Cat Spawn Egg",
   "item.pet_cemetery.skeleton_parrot_spawn_egg": "Skeleton Parrot Spawn Egg",
   "item.pet_cemetery.skeleton_wolf_spawn_egg": "Skeleton Wolf Spawn Egg",

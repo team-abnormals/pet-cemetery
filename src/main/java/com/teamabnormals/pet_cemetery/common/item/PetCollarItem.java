@@ -52,7 +52,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = PetCemetery.MOD_ID)
-public class ForgottenCollarItem extends Item {
+public class PetCollarItem extends Item {
 	public static final String PET_ID = "PetID";
 	public static final String PET_VARIANT = "PetVariant";
 
@@ -60,7 +60,7 @@ public class ForgottenCollarItem extends Item {
 	public static final String IS_CHILD = "IsChild";
 	public static final String OWNER_ID = "OwnerID";
 
-	public ForgottenCollarItem(Properties properties) {
+	public PetCollarItem(Properties properties) {
 		super(properties);
 	}
 
@@ -69,8 +69,8 @@ public class ForgottenCollarItem extends Item {
 		LivingEntity entity = event.getEntity();
 		EntityType<?> type = entity.getType();
 
-		if (type.is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR)) {
-			ItemStack collar = new ItemStack(PCItems.FORGOTTEN_COLLAR.get());
+		if (type.is(PCEntityTypeTags.DROPS_PET_COLLAR)) {
+			ItemStack collar = new ItemStack(PCItems.PET_COLLAR.get());
 			CompoundTag tag = collar.getOrCreateTag();
 
 			tag.putString(PET_ID, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());

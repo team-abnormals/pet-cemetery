@@ -17,7 +17,7 @@ public class PCItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		this.generatedWithOverlay(PCItems.FORGOTTEN_COLLAR.get());
+		this.generatedWithOverlay(PCItems.PET_COLLAR.get());
 
 		this.spawnEgg(PCItems.ZOMBIE_WOLF_SPAWN_EGG.get());
 		this.spawnEgg(PCItems.ZOMBIE_CAT_SPAWN_EGG.get());

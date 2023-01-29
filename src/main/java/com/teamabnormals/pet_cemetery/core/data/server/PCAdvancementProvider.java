@@ -5,7 +5,6 @@ import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.network.chat.Component;
@@ -23,7 +22,7 @@ public class PCAdvancementProvider extends AdvancementProvider {
 
 	@Override
 	protected void registerAdvancements(Consumer<Advancement> consumer, ExistingFileHelper existingFileHelper) {
-		createAdvancement("respawn_pet", "nether", new ResourceLocation("nether/charge_respawn_anchor"), PCItems.FORGOTTEN_COLLAR.get(), FrameType.TASK, true, true, false)
+		createAdvancement("respawn_pet", "nether", new ResourceLocation("nether/charge_respawn_anchor"), PCItems.PET_COLLAR.get(), FrameType.TASK, true, true, false)
 				.addCriterion("respawn_pet", RespawnAnimalTrigger.TriggerInstance.respawnedAnimal()).save(consumer, PetCemetery.MOD_ID + ":nether/respawn_pet");
 	}
 

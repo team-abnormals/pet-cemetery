@@ -5,7 +5,7 @@ import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadCatRenderer;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadParrotRenderer;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadWolfRenderer;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.layers.UndeadParrotLayer;
-import com.teamabnormals.pet_cemetery.common.item.ForgottenCollarItem;
+import com.teamabnormals.pet_cemetery.common.item.PetCollarItem;
 import com.teamabnormals.pet_cemetery.core.data.client.PCItemModelProvider;
 import com.teamabnormals.pet_cemetery.core.data.client.PCLanguageProvider;
 import com.teamabnormals.pet_cemetery.core.data.server.PCAdvancementProvider;
@@ -72,7 +72,7 @@ public class PetCemetery {
 
 	@OnlyIn(Dist.CLIENT)
 	private void registerItemColors(RegisterColorHandlersEvent.Item event) {
-		event.register((stack, color) -> color > 0 ? -1 : ((ForgottenCollarItem) stack.getItem()).getColor(stack), PCItems.FORGOTTEN_COLLAR.get());
+		event.register((stack, color) -> color > 0 ? -1 : ((PetCollarItem) stack.getItem()).getColor(stack), PCItems.PET_COLLAR.get());
 	}
 
 	@OnlyIn(Dist.CLIENT)

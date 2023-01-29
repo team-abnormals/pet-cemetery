@@ -19,11 +19,11 @@ public class PCLanguageProvider extends LanguageProvider {
 
 	@Override
 	public void addTranslations() {
-		this.add(PCItems.FORGOTTEN_COLLAR.get());
+		this.add(PCItems.PET_COLLAR.get());
 		this.add(PCItems.ZOMBIE_WOLF_SPAWN_EGG.get(), PCItems.ZOMBIE_CAT_SPAWN_EGG.get(), PCItems.ZOMBIE_PARROT_SPAWN_EGG.get(), PCItems.SKELETON_WOLF_SPAWN_EGG.get(), PCItems.SKELETON_CAT_SPAWN_EGG.get(), PCItems.SKELETON_PARROT_SPAWN_EGG.get());
 		this.add(PCEntityTypes.ZOMBIE_WOLF.get(), PCEntityTypes.ZOMBIE_CAT.get(), PCEntityTypes.ZOMBIE_PARROT.get(), PCEntityTypes.SKELETON_WOLF.get(), PCEntityTypes.SKELETON_CAT.get(), PCEntityTypes.SKELETON_PARROT.get());
 		this.add("tooltip." + PetCemetery.MOD_ID + ".baby", "Baby");
-		this.addAdvancement("nether.respawn_pet", "Pet Cemetery", "Respawn a pet using a Forgotten Collar at a charged Respawn Anchor");
+		this.addAdvancement("nether.respawn_pet", "Pet Cemetery", "Respawn a pet using a Pet Collar at a charged Respawn Anchor");
 	}
 
 	private void add(Item... entries) {

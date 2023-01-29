@@ -14,7 +14,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "pet_cemetery:forgotten_collar"
+      "item": "pet_cemetery:pet_collar"
     },
     "show_toast": true,
     "title": {

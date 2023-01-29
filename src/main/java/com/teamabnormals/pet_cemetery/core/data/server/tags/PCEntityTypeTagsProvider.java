@@ -16,6 +16,6 @@ public class PCEntityTypeTagsProvider extends EntityTypeTagsProvider {
 
 	@Override
 	public void addTags() {
-		this.tag(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR).add(EntityType.WOLF, EntityType.CAT, EntityType.PARROT, PCEntityTypes.ZOMBIE_WOLF.get(), PCEntityTypes.ZOMBIE_CAT.get(), PCEntityTypes.ZOMBIE_PARROT.get());
+		this.tag(PCEntityTypeTags.DROPS_PET_COLLAR).add(EntityType.WOLF, EntityType.CAT, EntityType.PARROT, PCEntityTypes.ZOMBIE_WOLF.get(), PCEntityTypes.ZOMBIE_CAT.get(), PCEntityTypes.ZOMBIE_PARROT.get());
 	}
 }
