@@ -8,6 +8,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.level.Level;
 
@@ -15,6 +17,10 @@ public class SkeletonCat extends Cat {
 
 	public SkeletonCat(EntityType<? extends SkeletonCat> type, Level worldIn) {
 		super(type, worldIn);
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		return Cat.createAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 4.0D);
 	}
 
 	@Override

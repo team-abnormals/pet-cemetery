@@ -27,12 +27,12 @@ public class PCEntityTypes {
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
-		event.put(ZOMBIE_WOLF.get(), Wolf.createAttributes().build());
-		event.put(ZOMBIE_CAT.get(), Cat.createAttributes().build());
-		event.put(ZOMBIE_PARROT.get(), Parrot.createAttributes().build());
+		event.put(ZOMBIE_WOLF.get(), ZombieWolf.createAttributes().build());
+		event.put(ZOMBIE_CAT.get(), ZombieCat.createAttributes().build());
+		event.put(ZOMBIE_PARROT.get(), ZombieParrot.createAttributes().build());
 
-		event.put(SKELETON_WOLF.get(), Wolf.createAttributes().build());
-		event.put(SKELETON_CAT.get(), Cat.createAttributes().build());
-		event.put(SKELETON_PARROT.get(), Parrot.createAttributes().build());
+		event.put(SKELETON_WOLF.get(), SkeletonWolf.createAttributes().build());
+		event.put(SKELETON_CAT.get(), SkeletonCat.createAttributes().build());
+		event.put(SKELETON_PARROT.get(), SkeletonParrot.createAttributes().build());
 	}
 }

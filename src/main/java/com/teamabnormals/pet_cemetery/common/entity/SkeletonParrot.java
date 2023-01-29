@@ -8,6 +8,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.level.Level;
 
@@ -15,6 +17,10 @@ public class SkeletonParrot extends Parrot {
 
 	public SkeletonParrot(EntityType<? extends SkeletonParrot> type, Level worldIn) {
 		super(type, worldIn);
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		return Parrot.createAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.FLYING_SPEED, 0.45F).add(Attributes.MOVEMENT_SPEED, 0.25F);
 	}
 
 	@Override
