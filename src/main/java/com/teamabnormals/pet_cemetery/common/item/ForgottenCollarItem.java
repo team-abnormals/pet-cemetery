@@ -52,7 +52,6 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = PetCemetery.MOD_ID)
 public class ForgottenCollarItem extends Item {
 	public static final String PET_ID = "PetID";
-	public static final String PET_NAME = "PetName";
 	public static final String PET_VARIANT = "PetVariant";
 
 	public static final String COLLAR_COLOR = "CollarColor";
@@ -79,7 +78,7 @@ public class ForgottenCollarItem extends Item {
 			tag.putString(ForgottenCollarItem.PET_ID, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
 			tag.putBoolean(ForgottenCollarItem.IS_CHILD, entity.isBaby());
 			if (entity.hasCustomName()) {
-				tag.putString(ForgottenCollarItem.PET_NAME, entity.getCustomName().getString());
+				collar.setHoverName(entity.getCustomName());
 			}
 
 			if (entity instanceof TamableAnimal pet) {
@@ -155,8 +154,8 @@ public class ForgottenCollarItem extends Item {
 
 					entity.setBaby(tag.getBoolean(IS_CHILD));
 					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
-					if (tag.contains(PET_NAME))
-						entity.setCustomName(Component.literal(tag.getString(PET_NAME)));
+					if (stack.hasCustomHoverName())
+						entity.setCustomName(stack.getHoverName());
 
 					if (entity instanceof TamableAnimal tameableEntity) {
 						tameableEntity.setTame(true);
@@ -215,12 +214,6 @@ public class ForgottenCollarItem extends Item {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		CompoundTag tag = stack.getOrCreateTag();
-
-		if (tag.contains(PET_NAME)) {
-			String name = tag.getString(PET_NAME);
-			tooltip.add(Component.literal(name).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-		}
-
 		if (tag.contains(PET_ID)) {
 			String petID = tag.getString(PET_ID);
 			EntityType<?> pet = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(petID));
