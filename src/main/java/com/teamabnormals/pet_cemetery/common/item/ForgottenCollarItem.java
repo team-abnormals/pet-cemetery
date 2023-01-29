@@ -68,27 +68,27 @@ public class ForgottenCollarItem extends Item {
 			ItemStack collar = new ItemStack(PCItems.FORGOTTEN_COLLAR.get());
 			CompoundTag tag = collar.getOrCreateTag();
 
-			tag.putString(ForgottenCollarItem.PET_ID, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
-			tag.putBoolean(ForgottenCollarItem.IS_CHILD, entity.isBaby());
+			tag.putString(PET_ID, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
+			tag.putBoolean(IS_CHILD, entity.isBaby());
 			if (entity.hasCustomName()) {
 				collar.setHoverName(entity.getCustomName());
 			}
 
 			if (entity instanceof TamableAnimal pet) {
 				if (pet.isTame()) {
-					tag.putString(ForgottenCollarItem.OWNER_ID, pet.getOwnerUUID().toString());
+					tag.putString(OWNER_ID, pet.getOwnerUUID().toString());
 
 					if (entity instanceof Wolf wolf) {
-						tag.putInt(ForgottenCollarItem.COLLAR_COLOR, wolf.getCollarColor().getId());
+						tag.putInt(COLLAR_COLOR, wolf.getCollarColor().getId());
 					}
 
 					if (entity instanceof Cat cat) {
-						tag.putInt(ForgottenCollarItem.PET_VARIANT, Registry.CAT_VARIANT.getId(cat.getCatVariant()));
-						tag.putInt(ForgottenCollarItem.COLLAR_COLOR, cat.getCollarColor().getId());
+						tag.putInt(PET_VARIANT, Registry.CAT_VARIANT.getId(cat.getCatVariant()));
+						tag.putInt(COLLAR_COLOR, cat.getCollarColor().getId());
 					}
 
 					if (entity instanceof Parrot parrot) {
-						tag.putInt(ForgottenCollarItem.PET_VARIANT, parrot.getVariant());
+						tag.putInt(PET_VARIANT, parrot.getVariant());
 					}
 
 					entity.spawnAtLocation(collar);

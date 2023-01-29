@@ -1,7 +1,9 @@
 package com.teamabnormals.pet_cemetery.core;
 
 import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.*;
+import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadCatRenderer;
+import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadParrotRenderer;
+import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadWolfRenderer;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.layers.UndeadParrotLayer;
 import com.teamabnormals.pet_cemetery.common.item.ForgottenCollarItem;
 import com.teamabnormals.pet_cemetery.core.data.client.PCItemModelProvider;
@@ -58,12 +60,12 @@ public class PetCemetery {
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_WOLF.get(), ZombieWolfRenderer::new);
-		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_CAT.get(), ZombieCatRenderer::new);
-		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_PARROT.get(), ZombieParrotRenderer::new);
-		event.registerEntityRenderer(PCEntityTypes.SKELETON_WOLF.get(), SkeletonWolfRenderer::new);
-		event.registerEntityRenderer(PCEntityTypes.SKELETON_CAT.get(), SkeletonCatRenderer::new);
-		event.registerEntityRenderer(PCEntityTypes.SKELETON_PARROT.get(), SkeletonParrotRenderer::new);
+		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_WOLF.get(), UndeadWolfRenderer::new);
+		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_CAT.get(), UndeadCatRenderer::new);
+		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_PARROT.get(), UndeadParrotRenderer::new);
+		event.registerEntityRenderer(PCEntityTypes.SKELETON_WOLF.get(), UndeadWolfRenderer::new);
+		event.registerEntityRenderer(PCEntityTypes.SKELETON_CAT.get(), UndeadCatRenderer::new);
+		event.registerEntityRenderer(PCEntityTypes.SKELETON_PARROT.get(), UndeadParrotRenderer::new);
 	}
 
 	@OnlyIn(Dist.CLIENT)

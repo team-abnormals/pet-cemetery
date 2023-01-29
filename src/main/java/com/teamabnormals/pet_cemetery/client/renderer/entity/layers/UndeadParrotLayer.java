@@ -2,8 +2,7 @@ package com.teamabnormals.pet_cemetery.client.renderer.entity.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.SkeletonParrotRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.ZombieParrotRenderer;
+import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadParrotRenderer;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.client.model.ParrotModel;
 import net.minecraft.client.model.PlayerModel;
@@ -38,7 +37,7 @@ public class UndeadParrotLayer<T extends Player> extends RenderLayer<T, PlayerMo
 		EntityType.byString(nbt.getString("id")).filter((type) -> type == PCEntityTypes.ZOMBIE_PARROT.get() || type == PCEntityTypes.SKELETON_PARROT.get()).ifPresent((type) -> {
 			matrixStackIn.pushPose();
 			matrixStackIn.translate(leftShoulderIn ? (double) 0.4F : (double) -0.4F, entity.isCrouching() ? (double) -1.3F : -1.5D, 0.0D);
-			VertexConsumer vertexConsumer = bufferIn.getBuffer(this.parrotModel.renderType(type == PCEntityTypes.ZOMBIE_PARROT.get() ? ZombieParrotRenderer.TEXTURE : SkeletonParrotRenderer.TEXTURE));
+			VertexConsumer vertexConsumer = bufferIn.getBuffer(this.parrotModel.renderType(type == PCEntityTypes.ZOMBIE_PARROT.get() ? UndeadParrotRenderer.ZOMBIE_PARROT_TEXTURE : UndeadParrotRenderer.SKELETON_PARROT_TEXTURE));
 			this.parrotModel.renderOnShoulder(matrixStackIn, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, limbSwing, limbSwingAmount, netHeadYaw, headPitch, entity.tickCount);
 			matrixStackIn.popPose();
 		});

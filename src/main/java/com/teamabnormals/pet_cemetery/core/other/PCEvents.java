@@ -19,14 +19,12 @@ public class PCEvents {
 	@SubscribeEvent
 	public static void onLivingSpawned(EntityJoinLevelEvent event) {
 		Entity entity = event.getEntity();
-
 		if (entity.getType().is(PCEntityTypeTags.DROPS_FORGOTTEN_COLLAR) && entity instanceof TamableAnimal pet) {
 			List<Goal> goalsToRemove = Lists.newArrayList();
 			pet.goalSelector.availableGoals.forEach((goal) -> {
 				if (goal.getGoal() instanceof FloatGoal)
 					goalsToRemove.add(goal.getGoal());
 			});
-
 			goalsToRemove.forEach(pet.goalSelector::removeGoal);
 		}
 	}
