@@ -57,7 +57,7 @@ public class RespawnPetTrigger extends SimpleCriterionTrigger<TriggerInstance> {
 		public JsonObject serializeToJson(SerializationContext context) {
 			JsonObject jsonObject = super.serializeToJson(context);
 			jsonObject.add("pet", this.pet.toJson(context));
-			jsonObject.add("respawnedPet", this.respawnedPet.toJson(context));
+			jsonObject.add("respawned_pet", this.respawnedPet.toJson(context));
 			return jsonObject;
 		}
 	}

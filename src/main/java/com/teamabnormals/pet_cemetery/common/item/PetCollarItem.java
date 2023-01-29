@@ -177,7 +177,7 @@ public class PetCollarItem extends Item {
 							double d0 = random.nextGaussian() * 0.05D;
 							double d1 = random.nextGaussian() * 0.05D;
 							double d2 = random.nextGaussian() * 0.05D;
-							NetworkUtil.spawnParticle(ParticleTypes.SMOKE.writeToString(), entity.getRandomX(1.0D), entity.getRandomY(), entity.getRandomZ(1.0D), d0, d1, d2);
+							NetworkUtil.spawnParticle(ParticleTypes.SMOKE.writeToString(), respawnedEntity.getRandomX(1.0D), respawnedEntity.getRandomY(), respawnedEntity.getRandomZ(1.0D), d0, d1, d2);
 						}
 
 						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE, SoundSource.BLOCKS, 1.0F, 1.0F);

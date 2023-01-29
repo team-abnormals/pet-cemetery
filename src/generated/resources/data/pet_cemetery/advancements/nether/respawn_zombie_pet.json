@@ -3,7 +3,7 @@
   "criteria": {
     "respawn_zombie_pet": {
       "conditions": {
-        "respawnedPet": [
+        "respawned_pet": [
           {
             "condition": "minecraft:entity_properties",
             "entity": "this",
