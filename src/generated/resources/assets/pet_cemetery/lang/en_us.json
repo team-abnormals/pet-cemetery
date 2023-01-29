@@ -1,4 +1,6 @@
 {
+  "advancements.pet_cemetery.nether.respawn_pet.description": "Respawn a pet using a Forgotten Collar at a charged Respawn Anchor",
+  "advancements.pet_cemetery.nether.respawn_pet.title": "Pet Cemetery",
   "entity.pet_cemetery.skeleton_cat": "Skeleton Cat",
   "entity.pet_cemetery.skeleton_parrot": "Skeleton Parrot",
   "entity.pet_cemetery.skeleton_wolf": "Skeleton Wolf",

@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:nether/charge_respawn_anchor",
+  "criteria": {
+    "respawn_pet": {
+      "conditions": {},
+      "trigger": "pet_cemetery:respawn_animal"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.pet_cemetery.nether.respawn_pet.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "pet_cemetery:forgotten_collar"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.pet_cemetery.nether.respawn_pet.title"
+    }
+  },
+  "requirements": [
+    [
+      "respawn_pet"
+    ]
+  ]
+}

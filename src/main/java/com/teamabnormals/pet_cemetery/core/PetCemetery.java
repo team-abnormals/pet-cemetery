@@ -8,6 +8,7 @@ import com.teamabnormals.pet_cemetery.client.renderer.entity.layers.UndeadParrot
 import com.teamabnormals.pet_cemetery.common.item.ForgottenCollarItem;
 import com.teamabnormals.pet_cemetery.core.data.client.PCItemModelProvider;
 import com.teamabnormals.pet_cemetery.core.data.client.PCLanguageProvider;
+import com.teamabnormals.pet_cemetery.core.data.server.PCAdvancementProvider;
 import com.teamabnormals.pet_cemetery.core.data.server.tags.PCEntityTypeTagsProvider;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
@@ -55,6 +56,7 @@ public class PetCemetery {
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		generator.addProvider(event.includeServer(), new PCEntityTypeTagsProvider(generator, helper));
+		generator.addProvider(event.includeServer(), new PCAdvancementProvider(generator, helper));
 		generator.addProvider(event.includeClient(), new PCItemModelProvider(generator, helper));
 		generator.addProvider(event.includeClient(), new PCLanguageProvider(generator));
 	}

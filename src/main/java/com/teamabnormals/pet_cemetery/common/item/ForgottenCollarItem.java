@@ -3,6 +3,7 @@ package com.teamabnormals.pet_cemetery.common.item;
 import com.google.common.collect.Maps;
 import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
+import com.teamabnormals.pet_cemetery.core.other.PCCriteriaTriggers;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
@@ -15,6 +16,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -27,7 +29,10 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -132,14 +137,15 @@ public class ForgottenCollarItem extends Item {
 					UUID owner = tag.contains(OWNER_ID) ? UUID.fromString(tag.getString(OWNER_ID)) : player.getUUID();
 					DyeColor collarColor = DyeColor.byId(tag.getInt(COLLAR_COLOR));
 					int variant = tag.getInt(PET_VARIANT);
-					LivingEntity returnEntity = null;
 
 					entity.setBaby(tag.getBoolean(IS_CHILD));
 					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
 					if (stack.hasCustomHoverName())
 						entity.setCustomName(stack.getHoverName());
 
+					TamableAnimal returnEntity = null;
 					if (entity instanceof TamableAnimal tameableEntity) {
+
 						tameableEntity.setTame(true);
 						tameableEntity.setOwnerUUID(owner);
 
@@ -161,6 +167,10 @@ public class ForgottenCollarItem extends Item {
 					}
 
 					if (returnEntity != null) {
+						if (player instanceof ServerPlayer serverPlayer) {
+							PCCriteriaTriggers.RESPAWN_ANIMAL.trigger(serverPlayer, returnEntity);
+						}
+
 						level.setBlockAndUpdate(pos, state.setValue(RespawnAnchorBlock.CHARGE, state.getValue(RespawnAnchorBlock.CHARGE) - 1));
 
 						for (int i = 0; i < 15; ++i) {
