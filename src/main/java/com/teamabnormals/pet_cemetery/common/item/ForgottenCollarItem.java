@@ -22,13 +22,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
@@ -57,10 +54,6 @@ public class ForgottenCollarItem extends Item {
 	public static final String COLLAR_COLOR = "CollarColor";
 	public static final String IS_CHILD = "IsChild";
 	public static final String OWNER_ID = "OwnerID";
-
-	public static final String HORSE_STRENGTH = "HorseStrength";
-	public static final String HORSE_SPEED = "HorseSpeed";
-	public static final String HORSE_HEALTH = "HorseHealth";
 
 	public ForgottenCollarItem(Properties properties) {
 		super(properties);
@@ -97,17 +90,6 @@ public class ForgottenCollarItem extends Item {
 					if (entity instanceof Parrot parrot) {
 						tag.putInt(ForgottenCollarItem.PET_VARIANT, parrot.getVariant());
 					}
-
-					entity.spawnAtLocation(collar);
-				}
-			} else if (entity instanceof AbstractHorse horse) {
-				if (horse.isTamed()) {
-					tag.putString(ForgottenCollarItem.OWNER_ID, horse.getOwnerUUID().toString());
-					tag.putDouble(ForgottenCollarItem.HORSE_SPEED, horse.getAttributeBaseValue(Attributes.MOVEMENT_SPEED));
-					tag.putDouble(ForgottenCollarItem.HORSE_HEALTH, horse.getAttributeBaseValue(Attributes.MAX_HEALTH));
-					tag.putDouble(ForgottenCollarItem.HORSE_STRENGTH, horse.getAttributeBaseValue(Attributes.JUMP_STRENGTH));
-					if (entity instanceof Horse)
-						tag.putInt(ForgottenCollarItem.PET_VARIANT, ((Horse) entity).getTypeVariant());
 
 					entity.spawnAtLocation(collar);
 				}
@@ -176,16 +158,6 @@ public class ForgottenCollarItem extends Item {
 							parrot.setVariant(variant);
 							returnEntity = parrot;
 						}
-
-					} else if (entity instanceof AbstractHorse horseEntity) {
-						horseEntity.setTamed(true);
-						horseEntity.setOwnerUUID(owner);
-
-						horseEntity.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(tag.getDouble(HORSE_STRENGTH));
-						horseEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(tag.getDouble(HORSE_SPEED));
-						horseEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(tag.getDouble(HORSE_HEALTH));
-
-						returnEntity = horseEntity;
 					}
 
 					if (returnEntity != null) {

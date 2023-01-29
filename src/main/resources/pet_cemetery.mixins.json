@@ -4,9 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "refmap": "pet_cemetery.refmap.json",
-  "mixins": [
-    "ZombieHorseMixin"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   }
