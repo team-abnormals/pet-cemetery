@@ -1,6 +1,7 @@
 package com.teamabnormals.pet_cemetery.core.mixin;
 
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Phantom;
 import org.apache.commons.compress.utils.Lists;
@@ -15,7 +16,7 @@ public class PhantomSweepAttackGoalMixin {
 
 	@Redirect(method = "canContinueToUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Cat;hiss()V"))
 	private void hiss(Cat cat) {
-		if (!(cat.getType().is(PCEntityTypeTags.DROPS_PET_COLLAR)))
+		if (cat.getMobType() != MobType.UNDEAD)
 			cat.hiss();
 	}
 
@@ -23,7 +24,7 @@ public class PhantomSweepAttackGoalMixin {
 	private boolean isEmpty(List<Cat> cats) {
 		List<Cat> toRemove = Lists.newArrayList();
 		for (Cat cat : cats) {
-			if (cat.getType().is(PCEntityTypeTags.DROPS_PET_COLLAR)) {
+			if (cat.getMobType() == MobType.UNDEAD) {
 				toRemove.add(cat);
 			}
 		}
