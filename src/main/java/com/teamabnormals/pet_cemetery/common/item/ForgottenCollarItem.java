@@ -1,26 +1,28 @@
 package com.teamabnormals.pet_cemetery.common.item;
 
 import com.google.common.collect.Maps;
-import com.teamabnormals.pet_cemetery.common.block.CompanionCoilBlock;
-import com.teamabnormals.pet_cemetery.common.block.state.properties.CoilType;
+import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
-import com.teamabnormals.pet_cemetery.core.registry.PCBlocks;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.entity.ParrotRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -30,12 +32,8 @@ import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -94,8 +92,7 @@ public class ForgottenCollarItem extends Item {
 					}
 
 					if (entity instanceof Cat cat) {
-						//TODO: Fix Cat Variant
-						//tag.putInt(ForgottenCollarItem.PET_VARIANT, cat.getCatVariant());
+						tag.putInt(ForgottenCollarItem.PET_VARIANT, Registry.CAT_VARIANT.getId(cat.getCatVariant()));
 						tag.putInt(ForgottenCollarItem.COLLAR_COLOR, cat.getCollarColor().getId());
 					}
 
@@ -120,20 +117,16 @@ public class ForgottenCollarItem extends Item {
 		}
 	}
 
-	@Override
-	public InteractionResult useOn(UseOnContext context) {
-		Level world = context.getLevel();
-		BlockPos pos = context.getClickedPos();
-		BlockState state = world.getBlockState(pos);
-		ItemStack stack = context.getItemInHand();
+	public static void onLightningStrike(ItemEntity itemEntity, ServerLevel level) {
+		if (itemEntity.getItem().is(PCItems.FORGOTTEN_COLLAR.get())) {
+			Vec3 pos = itemEntity.position();
+			BlockPos blockPos = new BlockPos(pos);
 
-		BlockPos offsetPos = pos.above(3);
-		if (state.is(PCBlocks.COMPANION_COIL.get()) && state.getValue(CompanionCoilBlock.COIL_TYPE) == CoilType.BOTTOM && state.getValue(CompanionCoilBlock.CHARGE) == 10 && world.canSeeSky(offsetPos) && world.isNight()) {
-			if (!world.getBlockState(offsetPos).getCollisionShape(world, offsetPos).isEmpty())
-				return InteractionResult.FAIL;
+			ItemStack stack = itemEntity.getItem();
+			RandomSource random = level.random;
 
-			Player player = context.getPlayer();
 			CompoundTag tag = stack.getOrCreateTag();
+			Entity thrower = itemEntity.getThrowingEntity();
 
 			if (tag.contains(PET_ID)) {
 				Map<EntityType<?>, EntityType<?>> UNDEAD_MAP = Util.make(Maps.newHashMap(), (map) -> {
@@ -148,17 +141,16 @@ public class ForgottenCollarItem extends Item {
 				});
 
 				EntityType<?> entityType = UNDEAD_MAP.get(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(tag.getString(PET_ID))));
-				System.out.println(entityType);
 
 				if (entityType != null) {
-					Animal entity = (Animal) entityType.create(world);
-					UUID owner = tag.contains(OWNER_ID) ? UUID.fromString(tag.getString(OWNER_ID)) : player.getUUID();
+					Animal entity = (Animal) entityType.create(level);
+					UUID owner = tag.contains(OWNER_ID) ? UUID.fromString(tag.getString(OWNER_ID)) : thrower.getUUID();
 					DyeColor collarColor = DyeColor.byId(tag.getInt(COLLAR_COLOR));
 					int variant = tag.getInt(PET_VARIANT);
 					LivingEntity returnEntity = null;
 
 					entity.setBaby(tag.getBoolean(IS_CHILD));
-					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
+					entity.setPos(pos);
 					if (tag.contains(PET_NAME))
 						entity.setCustomName(Component.literal(tag.getString(PET_NAME)));
 
@@ -172,8 +164,7 @@ public class ForgottenCollarItem extends Item {
 						}
 
 						if (tameableEntity instanceof Cat cat) {
-							//TODO: Fix Cat Variant
-							//cat.setCatVariant(variant);
+							cat.setCatVariant(Registry.CAT_VARIANT.byId(variant));
 							cat.setCollarColor(collarColor);
 							returnEntity = cat;
 						}
@@ -194,26 +185,31 @@ public class ForgottenCollarItem extends Item {
 						returnEntity = horseEntity;
 					}
 
+					for (int i = 0; i < 15; ++i) {
+						double d0 = random.nextGaussian() * 0.02D;
+						double d1 = random.nextGaussian() * 0.02D;
+						double d2 = random.nextGaussian() * 0.02D;
+						NetworkUtil.spawnParticle(ParticleTypes.HEART.writeToString(), entity.getRandomX(1.0D), entity.getRandomY(), entity.getRandomZ(1.0D), d0, d1, d2);
+					}
+
 					if (returnEntity != null) {
-						world.setBlockAndUpdate(pos, state.setValue(CompanionCoilBlock.CHARGE, 0));
+						BlockState state = level.getBlockState(blockPos);
+						if (state.is(BlockTags.FIRE)) {
+							level.removeBlock(blockPos, false);
+						}
+						for (Direction direction : Direction.Plane.HORIZONTAL) {
+							state = level.getBlockState(blockPos.relative(direction));
+							if (state.is(BlockTags.FIRE)) {
+								level.removeBlock(blockPos.relative(direction), false);
+							}
+						}
 
-						LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(world);
-						bolt.moveTo(Vec3.atBottomCenterOf(entity.blockPosition()));
-						bolt.setCause(player instanceof ServerPlayer ? (ServerPlayer) player : null);
-						bolt.setVisualOnly(true);
-						world.addFreshEntity(bolt);
-
-						world.playSound(player, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-						world.addFreshEntity(returnEntity);
-						if (!player.getAbilities().instabuild)
-							stack.shrink(1);
+						level.addFreshEntity(returnEntity);
+						itemEntity.discard();
 					}
 				}
 			}
-
-			return InteractionResult.sidedSuccess(world.isClientSide);
 		}
-		return InteractionResult.PASS;
 	}
 
 	@Override
@@ -236,8 +232,7 @@ public class ForgottenCollarItem extends Item {
 				String texture = "";
 
 				if (pet == EntityType.CAT || pet == PCEntityTypes.ZOMBIE_CAT.get()) {
-					//TODO: Fix Cat Variant
-					//texture = Cat.TEXTURE_BY_TYPE.get(type).toString().replace("minecraft:textures/entity/cat/", "");
+					texture = Registry.CAT_VARIANT.byId(type).texture().toString().replace("minecraft:textures/entity/cat/", "");
 					texture = texture.replace(".png", "").replace("all_", "").replace("_", " ").concat(" ");
 				}
 

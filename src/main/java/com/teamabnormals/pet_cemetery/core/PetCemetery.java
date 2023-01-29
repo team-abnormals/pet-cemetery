@@ -7,11 +7,8 @@ import com.teamabnormals.pet_cemetery.common.item.ForgottenCollarItem;
 import com.teamabnormals.pet_cemetery.core.data.client.PCItemModelProvider;
 import com.teamabnormals.pet_cemetery.core.data.client.PCLanguageProvider;
 import com.teamabnormals.pet_cemetery.core.data.server.tags.PCEntityTypeTagsProvider;
-import com.teamabnormals.pet_cemetery.core.registry.PCBlocks;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,9 +46,6 @@ public class PetCemetery {
 	}
 
 	private void clientSetup(FMLClientSetupEvent event) {
-		event.enqueueWork(() -> {
-			ItemBlockRenderTypes.setRenderLayer(PCBlocks.COMPANION_COIL.get(), RenderType.cutout());
-		});
 	}
 
 	private void dataSetup(GatherDataEvent event) {
