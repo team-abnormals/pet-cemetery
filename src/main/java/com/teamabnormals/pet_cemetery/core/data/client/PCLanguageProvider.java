@@ -23,7 +23,7 @@ public class PCLanguageProvider extends LanguageProvider {
 		this.add(PCItems.ZOMBIE_WOLF_SPAWN_EGG.get(), PCItems.ZOMBIE_CAT_SPAWN_EGG.get(), PCItems.ZOMBIE_PARROT_SPAWN_EGG.get(), PCItems.SKELETON_WOLF_SPAWN_EGG.get(), PCItems.SKELETON_CAT_SPAWN_EGG.get(), PCItems.SKELETON_PARROT_SPAWN_EGG.get());
 		this.add(PCEntityTypes.ZOMBIE_WOLF.get(), PCEntityTypes.ZOMBIE_CAT.get(), PCEntityTypes.ZOMBIE_PARROT.get(), PCEntityTypes.SKELETON_WOLF.get(), PCEntityTypes.SKELETON_CAT.get(), PCEntityTypes.SKELETON_PARROT.get());
 		this.add("tooltip." + PetCemetery.MOD_ID + ".baby", "Baby");
-		this.addAdvancement("nether.respawn_pet", "Frankenweenie", "Respawn a pet using a Pet Collar at a charged Respawn Anchor");
+		this.addAdvancement("nether.respawn_pet", "Frankenweenie", "Respawn a pet using a Pet Collar at a Respawn Anchor");
 		this.addAdvancement("nether.cured_zombie_pet", "Zombie Veterinarian", "Weaken and then cure a Zombie pet");
 		this.addAdvancement("nether.respawn_zombie_pet", "Grim Reaper", "Respawn a Zombie pet as a Skeleton");
 	}
