@@ -13,7 +13,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Parrot;
@@ -45,7 +48,10 @@ public class ZombieParrot extends Parrot {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		return Parrot.createAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.FLYING_SPEED, 0.35F).add(Attributes.MOVEMENT_SPEED, 0.15F);
+		return Parrot.createAttributes()
+				.add(Attributes.MAX_HEALTH, 6.0D + PCEntityTypes.HEALTH_DIFF)
+				.add(Attributes.FLYING_SPEED, 0.4F - PCEntityTypes.SPEED_DIFF)
+				.add(Attributes.MOVEMENT_SPEED, 0.2F - PCEntityTypes.SPEED_DIFF);
 	}
 
 	@Override

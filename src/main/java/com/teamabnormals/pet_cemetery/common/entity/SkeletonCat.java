@@ -20,7 +20,10 @@ public class SkeletonCat extends Cat {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		return Cat.createAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 4.0D);
+		return Cat.createAttributes()
+				.add(Attributes.MAX_HEALTH, 10.0D - PCEntityTypes.HEALTH_DIFF)
+				.add(Attributes.MOVEMENT_SPEED, 0.3F + PCEntityTypes.SPEED_DIFF)
+				.add(Attributes.ATTACK_DAMAGE, 3.0D + PCEntityTypes.DAMAGE_DIFF);
 	}
 
 	@Override

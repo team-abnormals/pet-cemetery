@@ -13,7 +13,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
@@ -45,7 +48,10 @@ public class ZombieCat extends Cat {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		return Cat.createAttributes().add(Attributes.MAX_HEALTH, 12.0D).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.ATTACK_DAMAGE, 2.0D);
+		return Cat.createAttributes()
+				.add(Attributes.MAX_HEALTH, 10.0D + PCEntityTypes.HEALTH_DIFF)
+				.add(Attributes.MOVEMENT_SPEED, 0.3F - PCEntityTypes.SPEED_DIFF)
+				.add(Attributes.ATTACK_DAMAGE, 3.0D - PCEntityTypes.DAMAGE_DIFF);
 	}
 
 	@Override

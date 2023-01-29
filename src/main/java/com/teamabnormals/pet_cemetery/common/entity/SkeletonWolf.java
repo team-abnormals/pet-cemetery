@@ -22,7 +22,10 @@ public class SkeletonWolf extends Wolf {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		return Wolf.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.ATTACK_DAMAGE, 3.0D);
+		return Wolf.createAttributes()
+				.add(Attributes.MOVEMENT_SPEED, 0.3F + PCEntityTypes.SPEED_DIFF)
+				.add(Attributes.MAX_HEALTH, 8.0D - PCEntityTypes.HEALTH_DIFF)
+				.add(Attributes.ATTACK_DAMAGE, 2.0D + PCEntityTypes.DAMAGE_DIFF);
 	}
 
 	@Override

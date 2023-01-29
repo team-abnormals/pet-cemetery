@@ -5,9 +5,6 @@ import com.teamabnormals.pet_cemetery.common.entity.*;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Parrot;
-import net.minecraft.world.entity.animal.Wolf;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -24,6 +21,10 @@ public class PCEntityTypes {
 	public static final RegistryObject<EntityType<SkeletonWolf>> SKELETON_WOLF = HELPER.createLivingEntity("skeleton_wolf", SkeletonWolf::new, MobCategory.CREATURE, 0.6F, 0.85F);
 	public static final RegistryObject<EntityType<SkeletonCat>> SKELETON_CAT = HELPER.createLivingEntity("skeleton_cat", SkeletonCat::new, MobCategory.CREATURE, 0.6F, 0.7F);
 	public static final RegistryObject<EntityType<SkeletonParrot>> SKELETON_PARROT = HELPER.createLivingEntity("skeleton_parrot", SkeletonParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
+
+	public static final double HEALTH_DIFF = 2.0D;
+	public static final double DAMAGE_DIFF = 1.0D;
+	public static final float SPEED_DIFF = 0.25F;
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
