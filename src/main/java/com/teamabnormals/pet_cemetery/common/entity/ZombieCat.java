@@ -3,7 +3,6 @@ package com.teamabnormals.pet_cemetery.common.entity;
 import com.teamabnormals.pet_cemetery.core.other.PCCriteriaTriggers;
 import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -11,7 +10,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -27,8 +25,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BedBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -104,7 +100,7 @@ public class ZombieCat extends Cat {
 	@Override
 	public void tick() {
 		if (!this.level.isClientSide && this.isAlive() && this.isConverting()) {
-			int i = this.getConversionProgress();
+			int i = PCUtil.getConversionProgress(this);
 			this.conversionTime -= i;
 			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.CAT, (timer) -> this.conversionTime = timer)) {
 				this.cureZombie((ServerLevel) this.level);
@@ -190,28 +186,5 @@ public class ZombieCat extends Cat {
 		if (this.getOwner() != null)
 			cat.setOwnerUUID(this.getOwner().getUUID());
 		return cat;
-	}
-
-	private int getConversionProgress() {
-		int i = 1;
-		if (this.random.nextFloat() < 0.01F) {
-			int j = 0;
-			BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-
-			for (int k = (int) this.getX() - 4; k < (int) this.getX() + 4 && j < 14; ++k) {
-				for (int l = (int) this.getY() - 4; l < (int) this.getY() + 4 && j < 14; ++l) {
-					for (int i1 = (int) this.getZ() - 4; i1 < (int) this.getZ() + 4 && j < 14; ++i1) {
-						BlockState state = this.level.getBlockState(mutableBlockPos.set(k, l, i1));
-						if (state.is(BlockTags.WOOL_CARPETS) || state.getBlock() instanceof BedBlock) {
-							if (this.random.nextFloat() < 0.3F) {
-								++i;
-							}
-							++j;
-						}
-					}
-				}
-			}
-		}
-		return i;
 	}
 }
