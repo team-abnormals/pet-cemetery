@@ -1,5 +1,6 @@
 package com.teamabnormals.pet_cemetery.common.entity;
 
+import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -21,9 +22,9 @@ public class SkeletonParrot extends Parrot {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		return Parrot.createAttributes()
-				.add(Attributes.MAX_HEALTH, 6.0D - PCEntityTypes.HEALTH_DIFF)
-				.add(Attributes.FLYING_SPEED, 0.4F + PCEntityTypes.SPEED_DIFF)
-				.add(Attributes.MOVEMENT_SPEED, 0.2F + PCEntityTypes.SPEED_DIFF);
+				.add(Attributes.MAX_HEALTH, 6.0D - PCUtil.HEALTH_DIFF)
+				.add(Attributes.FLYING_SPEED, 0.4F + PCUtil.SPEED_DIFF)
+				.add(Attributes.MOVEMENT_SPEED, 0.2F + PCUtil.SPEED_DIFF);
 	}
 
 	@Override

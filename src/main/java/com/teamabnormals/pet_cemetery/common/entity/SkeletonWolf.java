@@ -1,5 +1,6 @@
 package com.teamabnormals.pet_cemetery.common.entity;
 
+import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -23,9 +24,9 @@ public class SkeletonWolf extends Wolf {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		return Wolf.createAttributes()
-				.add(Attributes.MOVEMENT_SPEED, 0.3F + PCEntityTypes.SPEED_DIFF)
-				.add(Attributes.MAX_HEALTH, 8.0D - PCEntityTypes.HEALTH_DIFF)
-				.add(Attributes.ATTACK_DAMAGE, 2.0D + PCEntityTypes.DAMAGE_DIFF);
+				.add(Attributes.MOVEMENT_SPEED, 0.3F + PCUtil.SPEED_DIFF)
+				.add(Attributes.MAX_HEALTH, 8.0D - PCUtil.HEALTH_DIFF)
+				.add(Attributes.ATTACK_DAMAGE, 2.0D + PCUtil.DAMAGE_DIFF);
 	}
 
 	@Override

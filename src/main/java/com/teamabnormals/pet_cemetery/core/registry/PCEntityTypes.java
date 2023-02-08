@@ -22,10 +22,6 @@ public class PCEntityTypes {
 	public static final RegistryObject<EntityType<SkeletonCat>> SKELETON_CAT = HELPER.createLivingEntity("skeleton_cat", SkeletonCat::new, MobCategory.CREATURE, 0.6F, 0.7F);
 	public static final RegistryObject<EntityType<SkeletonParrot>> SKELETON_PARROT = HELPER.createLivingEntity("skeleton_parrot", SkeletonParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
 
-	public static final double HEALTH_DIFF = 2.0D;
-	public static final double DAMAGE_DIFF = 1.0D;
-	public static final float SPEED_DIFF = 0.25F;
-
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(ZOMBIE_WOLF.get(), ZombieWolf.createAttributes().build());

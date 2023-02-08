@@ -1,6 +1,7 @@
 package com.teamabnormals.pet_cemetery.common.entity;
 
 import com.teamabnormals.pet_cemetery.core.other.PCCriteriaTriggers;
+import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -51,9 +52,9 @@ public class ZombieCat extends Cat {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		return Cat.createAttributes()
-				.add(Attributes.MAX_HEALTH, 10.0D + PCEntityTypes.HEALTH_DIFF)
-				.add(Attributes.MOVEMENT_SPEED, 0.3F - PCEntityTypes.SPEED_DIFF)
-				.add(Attributes.ATTACK_DAMAGE, 3.0D - PCEntityTypes.DAMAGE_DIFF);
+				.add(Attributes.MAX_HEALTH, 10.0D + PCUtil.HEALTH_DIFF)
+				.add(Attributes.MOVEMENT_SPEED, 0.3F - PCUtil.SPEED_DIFF)
+				.add(Attributes.ATTACK_DAMAGE, 3.0D - PCUtil.DAMAGE_DIFF);
 	}
 
 	@Override

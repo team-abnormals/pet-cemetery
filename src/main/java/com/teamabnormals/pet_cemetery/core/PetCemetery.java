@@ -4,7 +4,7 @@ import com.teamabnormals.blueprint.core.util.registry.RegistryHelper;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadCatRenderer;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadParrotRenderer;
 import com.teamabnormals.pet_cemetery.client.renderer.entity.UndeadWolfRenderer;
-import com.teamabnormals.pet_cemetery.client.renderer.entity.layers.UndeadParrotLayer;
+import com.teamabnormals.pet_cemetery.client.renderer.entity.layers.UndeadParrotOnShoulderLayer;
 import com.teamabnormals.pet_cemetery.common.item.PetCollarItem;
 import com.teamabnormals.pet_cemetery.core.data.client.PCItemModelProvider;
 import com.teamabnormals.pet_cemetery.core.data.client.PCLanguageProvider;
@@ -79,7 +79,7 @@ public class PetCemetery {
 	private void registerLayers(EntityRenderersEvent.AddLayers event) {
 		event.getSkins().forEach(skin -> {
 			PlayerRenderer renderer = event.getSkin(skin);
-			renderer.addLayer(new UndeadParrotLayer<>(renderer, event.getEntityModels()));
+			renderer.addLayer(new UndeadParrotOnShoulderLayer<>(renderer, event.getEntityModels()));
 		});
 	}
 }

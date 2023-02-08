@@ -19,10 +19,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class UndeadParrotLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
+public class UndeadParrotOnShoulderLayer<T extends Player> extends RenderLayer<T, PlayerModel<T>> {
 	private final ParrotModel parrotModel;
 
-	public UndeadParrotLayer(RenderLayerParent<T, PlayerModel<T>> rendererIn, EntityModelSet modelSet) {
+	public UndeadParrotOnShoulderLayer(RenderLayerParent<T, PlayerModel<T>> rendererIn, EntityModelSet modelSet) {
 		super(rendererIn);
 		this.parrotModel = new ParrotModel(modelSet.bakeLayer(ModelLayers.PARROT));
 	}

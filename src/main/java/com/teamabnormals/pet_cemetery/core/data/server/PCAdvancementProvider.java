@@ -2,8 +2,8 @@ package com.teamabnormals.pet_cemetery.core.data.server;
 
 import com.teamabnormals.pet_cemetery.common.advancement.CuredZombiePetTrigger;
 import com.teamabnormals.pet_cemetery.common.advancement.RespawnPetTrigger;
-import com.teamabnormals.pet_cemetery.common.item.PetCollarItem;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
+import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.advancements.Advancement;
@@ -33,11 +33,11 @@ public class PCAdvancementProvider extends AdvancementProvider {
 		createAdvancement("respawn_pet", "nether", new ResourceLocation("nether/charge_respawn_anchor"), stack, FrameType.TASK, true, true, false)
 				.addCriterion("respawn_pet", RespawnPetTrigger.TriggerInstance.respawnPet()).save(consumer, PetCemetery.MOD_ID + ":nether/respawn_pet");
 
-		stack.getOrCreateTag().putInt(PetCollarItem.COLLAR_COLOR, DyeColor.GREEN.getId());
+		stack.getOrCreateTag().putInt(PCUtil.COLLAR_COLOR, DyeColor.GREEN.getId());
 		createAdvancement("cured_zombie_pet", "nether", new ResourceLocation(PetCemetery.MOD_ID, "nether/respawn_pet"), stack, FrameType.GOAL, true, true, false)
 				.addCriterion("cured_zombie_pet", CuredZombiePetTrigger.TriggerInstance.curedZombiePet()).save(consumer, PetCemetery.MOD_ID + ":nether/cured_zombie_pet");
 
-		stack.getOrCreateTag().putInt(PetCollarItem.COLLAR_COLOR, DyeColor.WHITE.getId());
+		stack.getOrCreateTag().putInt(PCUtil.COLLAR_COLOR, DyeColor.WHITE.getId());
 		createAdvancement("respawn_zombie_pet", "nether", new ResourceLocation(PetCemetery.MOD_ID, "nether/respawn_pet"), stack, FrameType.TASK, true, true, false)
 				.addCriterion("respawn_zombie_pet", RespawnPetTrigger.TriggerInstance.respawnPet(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(PCEntityTypeTags.SKELETON_PETS)).build())).save(consumer, PetCemetery.MOD_ID + ":nether/respawn_zombie_pet");
 	}
