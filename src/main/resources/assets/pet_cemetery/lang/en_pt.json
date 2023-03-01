@@ -1,0 +1,22 @@
+{
+  "advancements.pet_cemetery.nether.cured_zombie_pet.description": "Weaken an' cure yer undead pet",
+  "advancements.pet_cemetery.nether.cured_zombie_pet.title": "Davy Jones's remedy",
+  "advancements.pet_cemetery.nether.respawn_pet.description": "Revive yer slain best mate by offering 'is collar to a rebirthin' relic",
+  "advancements.pet_cemetery.nether.respawn_pet.title": "It be... alive?",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.description": "Rebirth yer undead matey as a skeleton",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.title": "Grim Reaper",
+  "entity.pet_cemetery.skeleton_cat": "Bag o' bones parrot killer",
+  "entity.pet_cemetery.skeleton_parrot": "Bag o' bones parrot",
+  "entity.pet_cemetery.skeleton_wolf": "Bag o' bones hound",
+  "entity.pet_cemetery.zombie_cat": "Undead parrot killer",
+  "entity.pet_cemetery.zombie_parrot": "Davy Jone's best matey",
+  "entity.pet_cemetery.zombie_wolf": "Davy Jone's Hound",
+  "item.pet_cemetery.pet_collar": "Collar o' yer best matey",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "Skeleton Cat Spawn Egg",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Skeleton Parrot Spawn Egg",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Skeleton Wolf Spawn Egg",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "Zombie Cat Spawn Egg",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Zombie Parrot Spawn Egg",
+  "item.pet_cemetery.zombie_wolf_spawn_egg": "Davy Jone's Hound cackle fruit",
+  "tooltip.pet_cemetery.baby": "Tiny"
+}
