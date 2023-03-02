@@ -12,11 +12,11 @@
   "entity.pet_cemetery.zombie_parrot": "Davy Jone's best matey",
   "entity.pet_cemetery.zombie_wolf": "Davy Jone's Hound",
   "item.pet_cemetery.pet_collar": "Collar o' yer best matey",
-  "item.pet_cemetery.skeleton_cat_spawn_egg": "Skeleton Cat Spawn Egg",
-  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Skeleton Parrot Spawn Egg",
-  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Skeleton Wolf Spawn Egg",
-  "item.pet_cemetery.zombie_cat_spawn_egg": "Zombie Cat Spawn Egg",
-  "item.pet_cemetery.zombie_parrot_spawn_egg": "Zombie Parrot Spawn Egg",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "Bag o' bones parrot killer cackle fruit",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Bag o' bones parrot cackle fruit",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Bag o' bones hound cackle fruit",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "Undead parrot killer cackle fruit",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Davy Jones's best matey cackle fruit",
   "item.pet_cemetery.zombie_wolf_spawn_egg": "Davy Jone's Hound cackle fruit",
   "tooltip.pet_cemetery.baby": "Tiny"
 }
