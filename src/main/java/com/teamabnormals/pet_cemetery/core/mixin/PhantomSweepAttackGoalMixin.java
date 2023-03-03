@@ -1,9 +1,9 @@
 package com.teamabnormals.pet_cemetery.core.mixin;
 
+import com.google.common.collect.Lists;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Phantom.PhantomSweepAttackGoal;
-import org.apache.commons.compress.utils.Lists;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
