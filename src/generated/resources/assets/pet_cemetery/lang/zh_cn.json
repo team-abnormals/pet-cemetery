@@ -1,0 +1,22 @@
+{
+  "advancements.pet_cemetery.nether.cured_zombie_pet.description": "虚弱并治愈僵尸宠物",
+  "advancements.pet_cemetery.nether.cured_zombie_pet.title": "僵尸科兽医",
+  "advancements.pet_cemetery.nether.respawn_pet.description": "在重生锚上使用宠物项圈复活一只宠物",
+  "advancements.pet_cemetery.nether.respawn_pet.title": "科学怪犬",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.description": "将僵尸宠物重生为骷髅",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.title": "死神",
+  "entity.pet_cemetery.skeleton_cat": "骷髅猫",
+  "entity.pet_cemetery.skeleton_parrot": "骷髅鹦鹉",
+  "entity.pet_cemetery.skeleton_wolf": "骷髅狼",
+  "entity.pet_cemetery.zombie_cat": "僵尸猫",
+  "entity.pet_cemetery.zombie_parrot": "僵尸鹦鹉",
+  "entity.pet_cemetery.zombie_wolf": "僵尸狼",
+  "item.pet_cemetery.pet_collar": "宠物项圈",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "骷髅猫刷怪蛋",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "骷髅鹦鹉刷怪蛋",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "骷髅狼刷怪蛋",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "僵尸猫刷怪蛋",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "僵尸鹦鹉刷怪蛋",
+  "item.pet_cemetery.zombie_wolf_spawn_egg": "僵尸狼刷怪蛋",
+  "tooltip.pet_cemetery.baby": "幼年"
+}
