@@ -145,7 +145,7 @@ public class PCEvents {
 							double d0 = random.nextGaussian() * 0.025D;
 							double d1 = random.nextGaussian() * 0.025D;
 							double d2 = random.nextGaussian() * 0.025D;
-							NetworkUtil.spawnParticle(ParticleTypes.LARGE_SMOKE.writeToString(), respawnedEntity.getRandomX(0.75D), respawnedEntity.getRandomY(), respawnedEntity.getRandomZ(0.75D), d0, d1, d2);
+							level.addParticle(ParticleTypes.LARGE_SMOKE, respawnedEntity.getRandomX(0.75D), respawnedEntity.getRandomY(), respawnedEntity.getRandomZ(0.75D), d0, d1, d2);
 						}
 
 						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE, SoundSource.BLOCKS, 1.0F, 1.0F);
