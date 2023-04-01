@@ -1,0 +1,22 @@
+{
+  "advancements.pet_cemetery.nether.cured_zombie_pet.description": "Indebolisci e cura un animale domestico zombi",
+  "advancements.pet_cemetery.nether.cured_zombie_pet.title": "Veterinario/a dei zombi",
+  "advancements.pet_cemetery.nether.respawn_pet.description": "Fai rinascere un animale domestico usando un collare per animali domestici su un'ancora della rinascita",
+  "advancements.pet_cemetery.nether.respawn_pet.title": "Frankenweenie",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.description": "Fai rinascere un animale domestico zombi come scheletro",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.title": "Mietitore",
+  "entity.pet_cemetery.skeleton_cat": "Gatto scheletro",
+  "entity.pet_cemetery.skeleton_parrot": "Pappagallo scheletro",
+  "entity.pet_cemetery.skeleton_wolf": "Lupo scheletro",
+  "entity.pet_cemetery.zombie_cat": "Gatto zombi",
+  "entity.pet_cemetery.zombie_parrot": "Pappagallo zombi",
+  "entity.pet_cemetery.zombie_wolf": "Lupo zombi",
+  "item.pet_cemetery.pet_collar": "Collare per animali domestici",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "Uovo generatore di gatto scheletro",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Uovo generatore di pappagallo scheletro",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Uovo generatore di lupo scheletro",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "Uovo generatore di gatto zombi",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Uovo generatore di pappagallo zombi",
+  "item.pet_cemetery.zombie_wolf_spawn_egg": "Uovo generatore di lupo zombi",
+  "tooltip.pet_cemetery.baby": "Neonato"
+}
