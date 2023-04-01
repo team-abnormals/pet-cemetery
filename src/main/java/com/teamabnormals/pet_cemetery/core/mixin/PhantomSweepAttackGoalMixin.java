@@ -18,6 +18,6 @@ public class PhantomSweepAttackGoalMixin {
 
 	@Redirect(method = "canContinueToUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getEntitiesOfClass(Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;"))
 	private <T extends Entity> List<T> getEntitiesOfClass(Level level, Class<T> aClass, AABB aabb, Predicate<? super T> predicate) {
-		return level.getEntitiesOfClass(aClass, aabb, entity -> entity.isAlive() && entity instanceof Cat cat && cat.getMobType() != MobType.UNDEAD);
+		return level.getEntitiesOfClass(aClass, aabb, entity -> predicate.test(entity) && entity instanceof Cat cat && cat.getMobType() != MobType.UNDEAD);
 	}
 }
