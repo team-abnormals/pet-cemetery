@@ -1,0 +1,22 @@
+{
+  "advancements.pet_cemetery.nether.cured_zombie_pet.description": "Despierta y luego cura a una Mascota Zombi",
+  "advancements.pet_cemetery.nether.cured_zombie_pet.title": "Veterinario de Zombis",
+  "advancements.pet_cemetery.nether.respawn_pet.description": "Reaparece a una Mascota usando un Collar en un Nexo de reaparición",
+  "advancements.pet_cemetery.nether.respawn_pet.title": "Frankenweenie",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.description": "Reaparece a una Mascota zombi como un esqueleto",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.title": "Cosecha sombría",
+  "entity.pet_cemetery.skeleton_cat": "Gato Esquelético",
+  "entity.pet_cemetery.skeleton_parrot": "Loro Esquéletico",
+  "entity.pet_cemetery.skeleton_wolf": "Lobo Esquelético",
+  "entity.pet_cemetery.zombie_cat": "Gato Zombi",
+  "entity.pet_cemetery.zombie_parrot": "Loro Zombi",
+  "entity.pet_cemetery.zombie_wolf": "Lobo Zombi",
+  "item.pet_cemetery.pet_collar": "Collar de mascota",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "Generar gato esquelético",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Generar loro esquelético",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Generar lobo esquelético",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "Generar gato zombi",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Generar loro zombi",
+  "item.pet_cemetery.zombie_wolf_spawn_egg": "Generar gato zombi",
+  "tooltip.pet_cemetery.baby": "Bebé"
+}
