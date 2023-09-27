@@ -1,7 +1,6 @@
 package com.teamabnormals.pet_cemetery.core.other;
 
 import com.google.common.collect.Lists;
-import com.teamabnormals.blueprint.core.util.NetworkUtil;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
