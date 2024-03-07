@@ -94,11 +94,11 @@ public class ZombieParrot extends Parrot {
 
 	@Override
 	public void tick() {
-		if (!this.level.isClientSide && this.isAlive() && this.isConverting()) {
+		if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
 			int i = PCUtil.getConversionProgress(this);
 			this.conversionTime -= i;
 			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.PARROT, (timer) -> this.conversionTime = timer)) {
-				this.cureZombie((ServerLevel) this.level);
+				this.cureZombie((ServerLevel) this.level());
 			}
 		}
 
@@ -113,7 +113,7 @@ public class ZombieParrot extends Parrot {
 				if (!player.getAbilities().instabuild) {
 					itemstack.shrink(1);
 				}
-				if (!this.level.isClientSide) {
+				if (!this.level().isClientSide) {
 					this.startConverting(player.getUUID(), this.random.nextInt(2401) + 3600);
 				}
 				return InteractionResult.SUCCESS;
@@ -134,8 +134,8 @@ public class ZombieParrot extends Parrot {
 		this.conversionTime = conversionTimeIn;
 		this.getEntityData().set(CONVERTING, true);
 		this.removeEffect(MobEffects.WEAKNESS);
-		this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, conversionTimeIn, Math.min(this.level.getDifficulty().getId() - 1, 0)));
-		this.level.broadcastEntityEvent(this, (byte) 16);
+		this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, conversionTimeIn, Math.min(this.level().getDifficulty().getId() - 1, 0)));
+		this.level().broadcastEntityEvent(this, (byte) 16);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -143,7 +143,7 @@ public class ZombieParrot extends Parrot {
 	public void handleEntityEvent(byte id) {
 		if (id == 16) {
 			if (!this.isSilent()) {
-				this.level.playLocalSound(this.getX(), this.getEyeY(), this.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, this.getSoundSource(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+				this.level().playLocalSound(this.getX(), this.getEyeY(), this.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, this.getSoundSource(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
 			}
 
 		} else {
@@ -157,7 +157,7 @@ public class ZombieParrot extends Parrot {
 		parrot.setVariant(this.getVariant());
 
 		if (this.conversionStarter != null) {
-			Player player = this.level.getPlayerByUUID(this.conversionStarter);
+			Player player = this.level().getPlayerByUUID(this.conversionStarter);
 			if (player instanceof ServerPlayer serverPlayer) {
 				PCCriteriaTriggers.CURED_ZOMBIE_PET.trigger(serverPlayer, this, parrot);
 			}

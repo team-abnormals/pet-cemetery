@@ -7,6 +7,7 @@ import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,10 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Parrot;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -39,6 +37,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @EventBusSubscriber(modid = PetCemetery.MOD_ID)
@@ -78,10 +77,11 @@ public class PCEvents {
 				if (entity instanceof Wolf wolf) {
 					tag.putInt(PCUtil.COLLAR_COLOR, wolf.getCollarColor().getId());
 				} else if (entity instanceof Cat cat) {
-					tag.putInt(PCUtil.PET_VARIANT, Registry.CAT_VARIANT.getId(cat.getCatVariant()));
+					String variant = cat.level().registryAccess().registry(Registries.CAT_VARIANT).get().getKey(cat.getVariant()).toString();
+					tag.putString(PCUtil.PET_VARIANT, variant);
 					tag.putInt(PCUtil.COLLAR_COLOR, cat.getCollarColor().getId());
 				} else if (entity instanceof Parrot parrot) {
-					tag.putInt(PCUtil.PET_VARIANT, parrot.getVariant());
+					tag.putInt(PCUtil.PET_VARIANT, parrot.getVariant().getId());
 				}
 
 				entity.spawnAtLocation(collar);
@@ -109,7 +109,6 @@ public class PCEvents {
 					Animal entity = (Animal) entityType.create(level);
 					UUID owner = tag.contains(PCUtil.OWNER_ID) ? UUID.fromString(tag.getString(PCUtil.OWNER_ID)) : player.getUUID();
 					DyeColor collarColor = DyeColor.byId(tag.getInt(PCUtil.COLLAR_COLOR));
-					int variant = tag.getInt(PCUtil.PET_VARIANT);
 
 					entity.setBaby(tag.getBoolean(PCUtil.IS_CHILD));
 					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
@@ -120,16 +119,22 @@ public class PCEvents {
 					if (entity instanceof TamableAnimal pet) {
 						pet.setTame(true);
 						pet.setOwnerUUID(owner);
-						if (pet instanceof Wolf wolf) {
+						if (pet instanceof Cat cat) {
+							Optional<Registry<CatVariant>> registry = level.registryAccess().registry(Registries.CAT_VARIANT);
+							if (registry.isPresent()) {
+								CatVariant variant = registry.get().get(new ResourceLocation(tag.getString(PCUtil.PET_VARIANT)));
+								if (variant != null) {
+									cat.setVariant(variant);
+									cat.setCollarColor(collarColor);
+									respawnedEntity = cat;
+								}
+							}
+						} else if (pet instanceof Parrot parrot) {
+							parrot.setVariant(Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)));
+							respawnedEntity = parrot;
+						} else if (pet instanceof Wolf wolf) {
 							wolf.setCollarColor(collarColor);
 							respawnedEntity = wolf;
-						} else if (pet instanceof Cat cat) {
-							cat.setCatVariant(Registry.CAT_VARIANT.byId(variant));
-							cat.setCollarColor(collarColor);
-							respawnedEntity = cat;
-						} else if (pet instanceof Parrot parrot) {
-							parrot.setVariant(variant);
-							respawnedEntity = parrot;
 						}
 					}
 
@@ -147,7 +152,7 @@ public class PCEvents {
 							level.addParticle(ParticleTypes.LARGE_SMOKE, respawnedEntity.getRandomX(0.75D), respawnedEntity.getRandomY(), respawnedEntity.getRandomZ(0.75D), d0, d1, d2);
 						}
 
-						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE, SoundSource.BLOCKS, 1.0F, 1.0F);
+						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 						level.addFreshEntity(respawnedEntity);
 						if (!player.getAbilities().instabuild)
 							stack.shrink(1);

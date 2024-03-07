@@ -16,9 +16,9 @@ public class CuredZombiePetTrigger extends SimpleCriterionTrigger<TriggerInstanc
 		return ID;
 	}
 
-	public CuredZombiePetTrigger.TriggerInstance createInstance(JsonObject jsonObject, EntityPredicate.Composite player, DeserializationContext context) {
-		EntityPredicate.Composite zombie = EntityPredicate.Composite.fromJson(jsonObject, "zombie", context);
-		EntityPredicate.Composite pet = EntityPredicate.Composite.fromJson(jsonObject, "pet", context);
+	public CuredZombiePetTrigger.TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate player, DeserializationContext context) {
+		ContextAwarePredicate zombie = EntityPredicate.fromJson(jsonObject, "zombie", context);
+		ContextAwarePredicate pet = EntityPredicate.fromJson(jsonObject, "pet", context);
 		return new CuredZombiePetTrigger.TriggerInstance(player, zombie, pet);
 	}
 
@@ -29,17 +29,17 @@ public class CuredZombiePetTrigger extends SimpleCriterionTrigger<TriggerInstanc
 	}
 
 	public static class TriggerInstance extends AbstractCriterionTriggerInstance {
-		private final EntityPredicate.Composite zombie;
-		private final EntityPredicate.Composite pet;
+		private final ContextAwarePredicate zombie;
+		private final ContextAwarePredicate pet;
 
-		public TriggerInstance(EntityPredicate.Composite player, EntityPredicate.Composite zombie, EntityPredicate.Composite pet) {
+		public TriggerInstance(ContextAwarePredicate player, ContextAwarePredicate zombie, ContextAwarePredicate pet) {
 			super(CuredZombiePetTrigger.ID, player);
 			this.zombie = zombie;
 			this.pet = pet;
 		}
 
 		public static CuredZombiePetTrigger.TriggerInstance curedZombiePet() {
-			return new CuredZombiePetTrigger.TriggerInstance(EntityPredicate.Composite.ANY, EntityPredicate.Composite.ANY, EntityPredicate.Composite.ANY);
+			return new CuredZombiePetTrigger.TriggerInstance(ContextAwarePredicate.ANY, ContextAwarePredicate.ANY, ContextAwarePredicate.ANY);
 		}
 
 		public boolean matches(LootContext zombieContext, LootContext petContext) {

@@ -4,6 +4,7 @@ import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -13,8 +14,8 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class PCLanguageProvider extends LanguageProvider {
 
-	public PCLanguageProvider(DataGenerator gen) {
-		super(gen, PetCemetery.MOD_ID, "en_us");
+	public PCLanguageProvider(PackOutput output) {
+		super(output, PetCemetery.MOD_ID, "en_us");
 	}
 
 	@Override

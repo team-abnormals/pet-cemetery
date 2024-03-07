@@ -36,5 +36,6 @@
     [
       "respawn_zombie_pet"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

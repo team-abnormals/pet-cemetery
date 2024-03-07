@@ -13,7 +13,9 @@ import com.teamabnormals.pet_cemetery.core.data.server.tags.PCEntityTypeTagsProv
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -26,6 +28,8 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.concurrent.CompletableFuture;
 
 @Mod(PetCemetery.MOD_ID)
 public class PetCemetery {
@@ -53,12 +57,14 @@ public class PetCemetery {
 
 	private void dataSetup(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
+		PackOutput output = generator.getPackOutput();
+		CompletableFuture<Provider> provider = event.getLookupProvider();
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
-		generator.addProvider(event.includeServer(), new PCEntityTypeTagsProvider(generator, helper));
-		generator.addProvider(event.includeServer(), new PCAdvancementProvider(generator, helper));
-		generator.addProvider(event.includeClient(), new PCItemModelProvider(generator, helper));
-		generator.addProvider(event.includeClient(), new PCLanguageProvider(generator));
+		generator.addProvider(event.includeServer(), new PCEntityTypeTagsProvider(output, provider, helper));
+		generator.addProvider(event.includeServer(), PCAdvancementProvider.create(output, provider, helper));
+		generator.addProvider(event.includeClient(), new PCItemModelProvider(output, helper));
+		generator.addProvider(event.includeClient(), new PCLanguageProvider(output));
 	}
 
 	private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

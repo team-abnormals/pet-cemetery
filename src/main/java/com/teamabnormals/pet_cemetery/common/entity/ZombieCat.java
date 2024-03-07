@@ -57,9 +57,9 @@ public class ZombieCat extends Cat {
 	public ZombieCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
 		ZombieCat cat = PCEntityTypes.ZOMBIE_CAT.get().create(world);
 		if (this.random.nextBoolean()) {
-			cat.setCatVariant(this.getCatVariant());
+			cat.setVariant(this.getVariant());
 		} else {
-			cat.setCatVariant(cat.getCatVariant());
+			cat.setVariant(cat.getVariant());
 		}
 
 		if (this.isTame()) {
@@ -99,11 +99,11 @@ public class ZombieCat extends Cat {
 
 	@Override
 	public void tick() {
-		if (!this.level.isClientSide && this.isAlive() && this.isConverting()) {
+		if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
 			int i = PCUtil.getConversionProgress(this);
 			this.conversionTime -= i;
 			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.CAT, (timer) -> this.conversionTime = timer)) {
-				this.cureZombie((ServerLevel) this.level);
+				this.cureZombie((ServerLevel) this.level());
 			}
 		}
 
@@ -119,7 +119,7 @@ public class ZombieCat extends Cat {
 					itemstack.shrink(1);
 				}
 
-				if (!this.level.isClientSide) {
+				if (!this.level().isClientSide) {
 					this.startConverting(player.getUUID(), this.random.nextInt(2401) + 3600);
 				}
 
@@ -141,8 +141,8 @@ public class ZombieCat extends Cat {
 		this.conversionTime = conversionTimeIn;
 		this.getEntityData().set(CONVERTING, true);
 		this.removeEffect(MobEffects.WEAKNESS);
-		this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, conversionTimeIn, Math.min(this.level.getDifficulty().getId() - 1, 0)));
-		this.level.broadcastEntityEvent(this, (byte) 16);
+		this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, conversionTimeIn, Math.min(this.level().getDifficulty().getId() - 1, 0)));
+		this.level().broadcastEntityEvent(this, (byte) 16);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -150,7 +150,7 @@ public class ZombieCat extends Cat {
 	public void handleEntityEvent(byte id) {
 		if (id == 16) {
 			if (!this.isSilent()) {
-				this.level.playLocalSound(this.getX(), this.getEyeY(), this.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, this.getSoundSource(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+				this.level().playLocalSound(this.getX(), this.getEyeY(), this.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, this.getSoundSource(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
 			}
 
 		} else {
@@ -161,7 +161,7 @@ public class ZombieCat extends Cat {
 	private void cureZombie(ServerLevel level) {
 		Cat cat = this.copyEntityData();
 		cat.finalizeSpawn(level, level.getCurrentDifficultyAt(cat.blockPosition()), MobSpawnType.CONVERSION, null, null);
-		cat.setCatVariant(this.getCatVariant());
+		cat.setVariant(this.getVariant());
 
 		if (this.conversionStarter != null) {
 			Player player = level.getPlayerByUUID(this.conversionStarter);

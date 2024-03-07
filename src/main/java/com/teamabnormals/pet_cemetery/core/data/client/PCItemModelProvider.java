@@ -2,7 +2,7 @@ package com.teamabnormals.pet_cemetery.core.data.client;
 
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -11,8 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PCItemModelProvider extends ItemModelProvider {
 
-	public PCItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-		super(generator, PetCemetery.MOD_ID, existingFileHelper);
+	public PCItemModelProvider(PackOutput output, ExistingFileHelper helper) {
+		super(output, PetCemetery.MOD_ID, helper);
 	}
 
 	@Override

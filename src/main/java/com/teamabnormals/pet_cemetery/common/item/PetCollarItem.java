@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -39,19 +40,18 @@ public class PetCollarItem extends Item {
 
 			Component petType = Component.translatable(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY);
 			if (tag.contains(PCUtil.PET_VARIANT)) {
-				int type = tag.getInt(PCUtil.PET_VARIANT);
 				String texture = "";
 
 				if (pet == EntityType.CAT || pet == PCEntityTypes.ZOMBIE_CAT.get()) {
-					texture = Registry.CAT_VARIANT.byId(type).texture().toString().replace("minecraft:textures/entity/cat/", "");
-					texture = texture.replace(".png", "").replace("_", " ").concat(" ");
+					ResourceLocation catVariant = new ResourceLocation(tag.getString(PCUtil.PET_VARIANT));
+					texture = catVariant.getPath();
 				}
 
 				if (pet == EntityType.PARROT || pet == PCEntityTypes.ZOMBIE_PARROT.get()) {
-					texture = ParrotRenderer.PARROT_LOCATIONS[type].toString().replace("minecraft:textures/entity/parrot/parrot_", "");
-					texture = texture.replace(".png", "").replace("_", "-").concat(" ");
+					texture = Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)).getSerializedName();
 				}
 
+				texture = texture.replace("_", " ").concat(" ");
 				petType = Component.literal(WordUtils.capitalize(texture)).withStyle(ChatFormatting.GRAY).append(petType);
 			}
 

@@ -13,6 +13,6 @@ public class SitWhenOrderedToGoalMixin {
 
 	@Redirect(method = "canUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/TamableAnimal;isInWaterOrBubble()Z"))
 	private boolean canUse(TamableAnimal animal) {
-		return (animal.getType().is(PCEntityTypeTags.ZOMBIE_PETS) || animal.getType().is(PCEntityTypeTags.SKELETON_PETS)) ? animal.getLevel().getBlockState(animal.blockPosition()).is(Blocks.BUBBLE_COLUMN) : animal.isInWaterOrBubble();
+		return (animal.getType().is(PCEntityTypeTags.ZOMBIE_PETS) || animal.getType().is(PCEntityTypeTags.SKELETON_PETS)) ? animal.level().getBlockState(animal.blockPosition()).is(Blocks.BUBBLE_COLUMN) : animal.isInWaterOrBubble();
 	}
 }

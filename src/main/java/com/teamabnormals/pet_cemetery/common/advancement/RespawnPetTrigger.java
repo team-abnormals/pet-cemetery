@@ -16,9 +16,9 @@ public class RespawnPetTrigger extends SimpleCriterionTrigger<TriggerInstance> {
 		return ID;
 	}
 
-	public RespawnPetTrigger.TriggerInstance createInstance(JsonObject jsonObject, EntityPredicate.Composite player, DeserializationContext context) {
-		EntityPredicate.Composite pet = EntityPredicate.Composite.fromJson(jsonObject, "pet", context);
-		EntityPredicate.Composite respawnedPet = EntityPredicate.Composite.fromJson(jsonObject, "respawned_pet", context);
+	public RespawnPetTrigger.TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate player, DeserializationContext context) {
+		ContextAwarePredicate pet = EntityPredicate.fromJson(jsonObject, "pet", context);
+		ContextAwarePredicate respawnedPet = EntityPredicate.fromJson(jsonObject, "respawned_pet", context);
 		return new RespawnPetTrigger.TriggerInstance(player, pet, respawnedPet);
 	}
 
@@ -29,21 +29,21 @@ public class RespawnPetTrigger extends SimpleCriterionTrigger<TriggerInstance> {
 	}
 
 	public static class TriggerInstance extends AbstractCriterionTriggerInstance {
-		private final EntityPredicate.Composite pet;
-		private final EntityPredicate.Composite respawnedPet;
+		private final ContextAwarePredicate pet;
+		private final ContextAwarePredicate respawnedPet;
 
-		public TriggerInstance(EntityPredicate.Composite player, EntityPredicate.Composite pet, EntityPredicate.Composite respawnedPet) {
+		public TriggerInstance(ContextAwarePredicate player, ContextAwarePredicate pet, ContextAwarePredicate respawnedPet) {
 			super(RespawnPetTrigger.ID, player);
 			this.pet = pet;
 			this.respawnedPet = respawnedPet;
 		}
 
 		public static RespawnPetTrigger.TriggerInstance respawnPet() {
-			return new RespawnPetTrigger.TriggerInstance(EntityPredicate.Composite.ANY, EntityPredicate.Composite.ANY, EntityPredicate.Composite.ANY);
+			return new RespawnPetTrigger.TriggerInstance(ContextAwarePredicate.ANY, ContextAwarePredicate.ANY, ContextAwarePredicate.ANY);
 		}
 
 		public static RespawnPetTrigger.TriggerInstance respawnPet(EntityPredicate entity) {
-			return new RespawnPetTrigger.TriggerInstance(EntityPredicate.Composite.ANY, EntityPredicate.Composite.ANY, EntityPredicate.Composite.wrap(entity));
+			return new RespawnPetTrigger.TriggerInstance(ContextAwarePredicate.ANY, ContextAwarePredicate.ANY, EntityPredicate.wrap(entity));
 		}
 
 		public boolean matches(LootContext petContext, LootContext respawnedPetContext) {

@@ -10,7 +10,7 @@ license = "https://github.com/team-abnormals/pet-cemetery/blob/main/LICENSE.txt"
     itemIcon = "pet_cemetery:pet_collar"
     configBackground = "minecraft:textures/block/weathered_copper.png"
     authors = "Team Abnormals"
-    credits = "bageldotjpg, hatsondogs, Rye"
+    credits = "bageldotjpg, hatsondogs"
     displayURL = "https://www.teamabnormals.com/mods/pet-cemetery"
     displayName = "Pet Cemetery"
     description = '''
@@ -20,20 +20,20 @@ license = "https://github.com/team-abnormals/pet-cemetery/blob/main/LICENSE.txt"
 [[dependencies.pet_cemetery]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19.2,1.20)"
+    versionRange = "[1.20.1,1.21)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.pet_cemetery]]
     modId = "forge"
     mandatory = true
-    versionRange = "[43.1.0,)"
+    versionRange = "[47.1.3,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.pet_cemetery]]
     modId = "blueprint"
     mandatory = true
-    versionRange = "[6.1.0,)"
+    versionRange = "[7.0.1,)"
     ordering = "AFTER"
     side = "BOTH"

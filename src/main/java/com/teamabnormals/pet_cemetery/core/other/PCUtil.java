@@ -42,7 +42,7 @@ public class PCUtil {
 			for (int x = (int) entity.getX() - 4; x < (int) entity.getX() + 4 && bonusBlocks < 14; ++x) {
 				for (int y = (int) entity.getY() - 4; y < (int) entity.getY() + 4 && bonusBlocks < 14; ++y) {
 					for (int z = (int) entity.getZ() - 4; z < (int) entity.getZ() + 4 && bonusBlocks < 14; ++z) {
-						BlockState state = entity.level.getBlockState(pos.set(x, y, z));
+						BlockState state = entity.level().getBlockState(pos.set(x, y, z));
 						if (state.is(BlockTags.WOOL_CARPETS) || state.getBlock() instanceof BedBlock) {
 							if (entity.getRandom().nextFloat() < 0.3F) {
 								++conversionProgress;
