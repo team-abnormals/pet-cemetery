@@ -47,6 +47,7 @@ public class PetCemetery {
 		bus.addListener(this::registerRenderers);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			PCItems.setupTabEditors();
 			bus.addListener(this::registerLayers);
 			bus.addListener(this::registerItemColors);
 		});
