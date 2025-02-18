@@ -1,0 +1,22 @@
+{
+  "advancements.pet_cemetery.nether.cured_zombie_pet.description": "Affaiblissez et soigner un animal de compagnie zombifié",
+  "advancements.pet_cemetery.nether.cured_zombie_pet.title": "Vétérinaire de Zombie",
+  "advancements.pet_cemetery.nether.respawn_pet.description": "Faîtes réapparaître un animal de compagnie en utilisant un collier pour animaux de compagnie a une ancre de réaparition",
+  "advancements.pet_cemetery.nether.respawn_pet.title": "Frankenstein",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.description": "Faîtes réapparaître un animal de compagnie zombifié sous forme d'un squelette",
+  "advancements.pet_cemetery.nether.respawn_zombie_pet.title": "Faucheur",
+  "entity.pet_cemetery.skeleton_cat": "Chat squelette",
+  "entity.pet_cemetery.skeleton_parrot": "Perroquet squelette",
+  "entity.pet_cemetery.skeleton_wolf": "Loup squelette",
+  "entity.pet_cemetery.zombie_cat": "Chat zombifié",
+  "entity.pet_cemetery.zombie_parrot": "Perroquet zombifié",
+  "entity.pet_cemetery.zombie_wolf": "Loup zombifié",
+  "item.pet_cemetery.pet_collar": "Collier pour animaux de compagnie",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "Oeuf d'apparition de chat squelette",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Oeuf d'apparition de perroquet squelette",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Oeuf d'apparition de loup squelette",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "Oeuf d'apparition de chat zombifié",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Oeuf d'apparition de perroquet zombifié",
+  "item.pet_cemetery.zombie_wolf_spawn_egg": "Oeuf d'apparition de loup zombifié",
+  "tooltip.pet_cemetery.baby": "Bébé"
+}
