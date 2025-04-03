@@ -5,22 +5,22 @@ import com.teamabnormals.pet_cemetery.common.entity.*;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 @EventBusSubscriber(modid = PetCemetery.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PCEntityTypes {
-	public static final EntitySubRegistryHelper HELPER = PetCemetery.REGISTRY_HELPER.getEntitySubHelper();
+	public static final EntitySubRegistryHelper ENTITY_TYPES = PetCemetery.REGISTRY_HELPER.getEntitySubHelper();
 
-	public static final RegistryObject<EntityType<ZombieWolf>> ZOMBIE_WOLF = HELPER.createLivingEntity("zombie_wolf", ZombieWolf::new, MobCategory.CREATURE, 0.6F, 0.85F);
-	public static final RegistryObject<EntityType<ZombieCat>> ZOMBIE_CAT = HELPER.createLivingEntity("zombie_cat", ZombieCat::new, MobCategory.CREATURE, 0.6F, 0.7F);
-	public static final RegistryObject<EntityType<ZombieParrot>> ZOMBIE_PARROT = HELPER.createLivingEntity("zombie_parrot", ZombieParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
+	public static final DeferredHolder<EntityType<?>, EntityType<ZombieWolf>> ZOMBIE_WOLF = ENTITY_TYPES.createEntity("zombie_wolf", ZombieWolf::new, MobCategory.CREATURE, 0.6F, 0.85F);
+	public static final DeferredHolder<EntityType<?>, EntityType<ZombieCat>> ZOMBIE_CAT = ENTITY_TYPES.createEntity("zombie_cat", ZombieCat::new, MobCategory.CREATURE, 0.6F, 0.7F);
+	public static final DeferredHolder<EntityType<?>, EntityType<ZombieParrot>> ZOMBIE_PARROT = ENTITY_TYPES.createEntity("zombie_parrot", ZombieParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
 
-	public static final RegistryObject<EntityType<SkeletonWolf>> SKELETON_WOLF = HELPER.createLivingEntity("skeleton_wolf", SkeletonWolf::new, MobCategory.CREATURE, 0.6F, 0.85F);
-	public static final RegistryObject<EntityType<SkeletonCat>> SKELETON_CAT = HELPER.createLivingEntity("skeleton_cat", SkeletonCat::new, MobCategory.CREATURE, 0.6F, 0.7F);
-	public static final RegistryObject<EntityType<SkeletonParrot>> SKELETON_PARROT = HELPER.createLivingEntity("skeleton_parrot", SkeletonParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
+	public static final DeferredHolder<EntityType<?>, EntityType<SkeletonWolf>> SKELETON_WOLF = ENTITY_TYPES.createEntity("skeleton_wolf", SkeletonWolf::new, MobCategory.CREATURE, 0.6F, 0.85F);
+	public static final DeferredHolder<EntityType<?>, EntityType<SkeletonCat>> SKELETON_CAT = ENTITY_TYPES.createEntity("skeleton_cat", SkeletonCat::new, MobCategory.CREATURE, 0.6F, 0.7F);
+	public static final DeferredHolder<EntityType<?>, EntityType<SkeletonParrot>> SKELETON_PARROT = ENTITY_TYPES.createEntity("skeleton_parrot", SkeletonParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {

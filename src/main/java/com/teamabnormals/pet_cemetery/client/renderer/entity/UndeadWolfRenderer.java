@@ -8,8 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Wolf;
 
 public class UndeadWolfRenderer extends WolfRenderer {
-	private static final ResourceLocation ZOMBIE_WOLF_TEXTURE = new ResourceLocation(PetCemetery.MOD_ID, "textures/entity/wolf/zombie_wolf.png");
-	private static final ResourceLocation SKELETON_WOLF_TEXTURE = new ResourceLocation(PetCemetery.MOD_ID, "textures/entity/wolf/skeleton_wolf.png");
+	private static final ResourceLocation ZOMBIE_WOLF_TEXTURE = PetCemetery.location("textures/entity/wolf/zombie_wolf.png");
+	private static final ResourceLocation SKELETON_WOLF_TEXTURE = PetCemetery.location("textures/entity/wolf/skeleton_wolf.png");
 
 	public UndeadWolfRenderer(EntityRendererProvider.Context context) {
 		super(context);

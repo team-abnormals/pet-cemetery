@@ -3,10 +3,14 @@ package com.teamabnormals.pet_cemetery.core.other;
 import com.google.common.collect.Lists;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
+import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -25,16 +29,16 @@ import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +53,7 @@ public class PCEvents {
 		EntityType<?> entityType = entity.getType();
 		if ((entityType.is(PCEntityTypeTags.ZOMBIE_PETS) || entityType.is(PCEntityTypeTags.SKELETON_PETS)) && entity instanceof TamableAnimal pet) {
 			List<Goal> goalsToRemove = Lists.newArrayList();
-			pet.goalSelector.availableGoals.forEach((goal) -> {
+			pet.goalSelector.getAvailableGoals().forEach((goal) -> {
 				if (goal.getGoal() instanceof FloatGoal)
 					goalsToRemove.add(goal.getGoal());
 			});
@@ -64,33 +68,34 @@ public class PCEvents {
 
 		if (type.is(PCEntityTypeTags.DROPS_PET_COLLAR)) {
 			ItemStack collar = new ItemStack(PCItems.PET_COLLAR.get());
-			CompoundTag tag = collar.getOrCreateTag();
-
-			tag.putString(PCUtil.PET_ID, ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
+			CompoundTag tag = new CompoundTag();
+			tag.putString(PCUtil.PET_ID, BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
 			tag.putBoolean(PCUtil.IS_CHILD, entity.isBaby());
 			if (entity.hasCustomName()) {
-				collar.setHoverName(entity.getCustomName());
+				collar.set(DataComponents.CUSTOM_NAME, entity.getCustomName());
 			}
 
 			if (entity instanceof TamableAnimal pet && pet.isTame()) {
 				tag.putString(PCUtil.OWNER_ID, pet.getOwnerUUID().toString());
 				if (entity instanceof Wolf wolf) {
+					String variant = wolf.level().registryAccess().registry(Registries.WOLF_VARIANT).get().getKey(wolf.getVariant().value()).toString();
+					tag.putString(PCUtil.PET_VARIANT, variant);
 					tag.putInt(PCUtil.COLLAR_COLOR, wolf.getCollarColor().getId());
 				} else if (entity instanceof Cat cat) {
-					String variant = cat.level().registryAccess().registry(Registries.CAT_VARIANT).get().getKey(cat.getVariant()).toString();
+					String variant = cat.level().registryAccess().registry(Registries.CAT_VARIANT).get().getKey(cat.getVariant().value()).toString();
 					tag.putString(PCUtil.PET_VARIANT, variant);
 					tag.putInt(PCUtil.COLLAR_COLOR, cat.getCollarColor().getId());
 				} else if (entity instanceof Parrot parrot) {
 					tag.putInt(PCUtil.PET_VARIANT, parrot.getVariant().getId());
 				}
-
+				collar.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
 				entity.spawnAtLocation(collar);
 			}
 		}
 	}
 
 	@SubscribeEvent
-	public static void onRightClickBlock(RightClickBlock event) {
+	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 		Level level = event.getLevel();
 		BlockPos pos = event.getPos();
 		BlockState state = level.getBlockState(pos);
@@ -100,10 +105,10 @@ public class PCEvents {
 		if (stack.is(PCItems.PET_COLLAR.get()) && state.is(Blocks.RESPAWN_ANCHOR) && level.dimensionType().respawnAnchorWorks() && state.getValue(RespawnAnchorBlock.CHARGE) > RespawnAnchorBlock.MIN_CHARGES && level.getBlockState(offsetPos).getCollisionShape(level, offsetPos).isEmpty()) {
 			Player player = event.getEntity();
 			RandomSource random = player.getRandom();
-			CompoundTag tag = stack.getOrCreateTag();
+			CompoundTag tag = stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag();
 
 			if (tag.contains(PCUtil.PET_ID)) {
-				EntityType<?> entityType = PCUtil.UNDEAD_MAP.get(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(tag.getString(PCUtil.PET_ID))));
+				EntityType<?> entityType = PCUtil.UNDEAD_MAP.get(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(tag.getString(PCUtil.PET_ID))));
 
 				if (entityType != null) {
 					Animal entity = (Animal) entityType.create(level);
@@ -112,19 +117,20 @@ public class PCEvents {
 
 					entity.setBaby(tag.getBoolean(PCUtil.IS_CHILD));
 					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
-					if (stack.hasCustomHoverName())
+					if (stack.has(DataComponents.CUSTOM_NAME)) {
 						entity.setCustomName(stack.getHoverName());
-
+					}
 					TamableAnimal respawnedEntity = null;
 					if (entity instanceof TamableAnimal pet) {
-						pet.setTame(true);
+						pet.setTame(true, false);
 						pet.setOwnerUUID(owner);
 						if (pet instanceof Cat cat) {
 							Optional<Registry<CatVariant>> registry = level.registryAccess().registry(Registries.CAT_VARIANT);
 							if (registry.isPresent()) {
-								CatVariant variant = registry.get().get(new ResourceLocation(tag.getString(PCUtil.PET_VARIANT)));
+								CatVariant variant = registry.get().get(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
+								Holder<CatVariant> variantHolder = registry.get().wrapAsHolder(variant);
 								if (variant != null) {
-									cat.setVariant(variant);
+									cat.setVariant(variantHolder);
 									cat.setCollarColor(collarColor);
 									respawnedEntity = cat;
 								}
@@ -133,8 +139,16 @@ public class PCEvents {
 							parrot.setVariant(Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)));
 							respawnedEntity = parrot;
 						} else if (pet instanceof Wolf wolf) {
-							wolf.setCollarColor(collarColor);
-							respawnedEntity = wolf;
+							Optional<Registry<WolfVariant>> registry = level.registryAccess().registry(Registries.WOLF_VARIANT);
+							if (registry.isPresent()) {
+								WolfVariant variant = registry.get().get(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
+								Holder<WolfVariant> variantHolder = registry.get().wrapAsHolder(variant);
+								if (variant != null) {
+									wolf.setVariant(variantHolder);
+									wolf.setCollarColor(collarColor);
+									respawnedEntity = wolf;
+								}
+							}
 						}
 					}
 
@@ -152,7 +166,7 @@ public class PCEvents {
 							level.addParticle(ParticleTypes.LARGE_SMOKE, respawnedEntity.getRandomX(0.75D), respawnedEntity.getRandomY(), respawnedEntity.getRandomZ(0.75D), d0, d1, d2);
 						}
 
-						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
 						level.addFreshEntity(respawnedEntity);
 						if (!player.getAbilities().instabuild)
 							stack.shrink(1);

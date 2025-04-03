@@ -6,8 +6,9 @@ import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -22,5 +23,7 @@ public class PCEntityTypeTagsProvider extends EntityTypeTagsProvider {
 		this.tag(PCEntityTypeTags.ZOMBIE_PETS).add(PCEntityTypes.ZOMBIE_WOLF.get(), PCEntityTypes.ZOMBIE_CAT.get(), PCEntityTypes.ZOMBIE_PARROT.get());
 		this.tag(PCEntityTypeTags.SKELETON_PETS).add(PCEntityTypes.SKELETON_WOLF.get(), PCEntityTypes.SKELETON_CAT.get(), PCEntityTypes.SKELETON_PARROT.get());
 		this.tag(PCEntityTypeTags.DROPS_PET_COLLAR).add(EntityType.WOLF, EntityType.CAT, EntityType.PARROT).addTag(PCEntityTypeTags.ZOMBIE_PETS);
+
+		this.tag(EntityTypeTags.UNDEAD).addTags(PCEntityTypeTags.ZOMBIE_PETS, PCEntityTypeTags.SKELETON_PETS);
 	}
 }

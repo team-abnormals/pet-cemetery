@@ -2,10 +2,10 @@ package com.teamabnormals.pet_cemetery.common.item;
 
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.PCUtil;
+import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.entity.ParrotRenderer;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,13 +15,11 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.component.CustomData;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.text.WordUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class PetCollarItem extends Item {
@@ -32,23 +30,28 @@ public class PetCollarItem extends Item {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-		CompoundTag tag = stack.getOrCreateTag();
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+		CompoundTag tag = stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag();
 		if (tag.contains(PCUtil.PET_ID)) {
 			String petID = tag.getString(PCUtil.PET_ID);
-			EntityType<?> pet = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(petID));
+			EntityType<?> pet = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(petID));
 
 			Component petType = Component.translatable(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY);
 			if (tag.contains(PCUtil.PET_VARIANT)) {
 				String texture = "";
 
 				if (pet == EntityType.CAT || pet == PCEntityTypes.ZOMBIE_CAT.get()) {
-					ResourceLocation catVariant = new ResourceLocation(tag.getString(PCUtil.PET_VARIANT));
+					ResourceLocation catVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
 					texture = catVariant.getPath();
 				}
 
 				if (pet == EntityType.PARROT || pet == PCEntityTypes.ZOMBIE_PARROT.get()) {
 					texture = Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)).getSerializedName();
+				}
+
+				if (pet == EntityType.WOLF || pet == PCEntityTypes.ZOMBIE_WOLF.get()) {
+					ResourceLocation wolfVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
+					texture = wolfVariant.getPath();
 				}
 
 				texture = texture.replace("_", " ").concat(" ");
@@ -61,13 +64,12 @@ public class PetCollarItem extends Item {
 			tooltip.add(petType);
 		}
 
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, context, tooltip, flagIn);
 	}
 
 	public int getColor(ItemStack stack) {
-		CompoundTag tag = stack.getOrCreateTag();
+		CompoundTag tag = stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag();
 		DyeColor color = tag.contains(PCUtil.COLLAR_COLOR) ? DyeColor.byId(tag.getInt(PCUtil.COLLAR_COLOR)) : DyeColor.RED;
-		float[] diffuseColors = color.getTextureDiffuseColors();
-		return ((((int) (diffuseColors[0] * 255.0F)) << 8) + ((int) (diffuseColors[1] * 255.0F)) << 8) + ((int) (diffuseColors[2] * 255.0F));
+		return color.getTextureDiffuseColor();
 	}
 }

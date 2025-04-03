@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
@@ -38,7 +37,7 @@ public class SkeletonCat extends Cat {
 
 		if (this.isTame()) {
 			cat.setOwnerUUID(this.getOwnerUUID());
-			cat.setTame(true);
+			cat.setTame(true, false);
 			if (this.random.nextBoolean()) {
 				cat.setCollarColor(this.getCollarColor());
 			} else {
@@ -47,11 +46,6 @@ public class SkeletonCat extends Cat {
 		}
 
 		return cat;
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEAD;
 	}
 
 	@Override

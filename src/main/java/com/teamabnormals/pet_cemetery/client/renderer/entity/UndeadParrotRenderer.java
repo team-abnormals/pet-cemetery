@@ -8,8 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Parrot;
 
 public class UndeadParrotRenderer extends ParrotRenderer {
-	public static final ResourceLocation ZOMBIE_PARROT_TEXTURE = new ResourceLocation(PetCemetery.MOD_ID, "textures/entity/parrot/zombie_parrot.png");
-	public static final ResourceLocation SKELETON_PARROT_TEXTURE = new ResourceLocation(PetCemetery.MOD_ID, "textures/entity/parrot/skeleton_parrot.png");
+	public static final ResourceLocation ZOMBIE_PARROT_TEXTURE = PetCemetery.location("textures/entity/parrot/zombie_parrot.png");
+	public static final ResourceLocation SKELETON_PARROT_TEXTURE = PetCemetery.location("textures/entity/parrot/skeleton_parrot.png");
 
 	public UndeadParrotRenderer(EntityRendererProvider.Context context) {
 		super(context);

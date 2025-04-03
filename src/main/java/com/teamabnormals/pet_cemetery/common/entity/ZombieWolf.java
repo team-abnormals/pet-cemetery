@@ -17,7 +17,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Wolf;
@@ -25,9 +24,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -48,18 +47,24 @@ public class ZombieWolf extends Wolf {
 				.add(Attributes.ATTACK_DAMAGE, 2.0D - PCUtil.DAMAGE_DIFF);
 	}
 
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(CONVERTING, false);
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(CONVERTING, false);
 	}
 
 	@Override
 	public ZombieWolf getBreedOffspring(ServerLevel world, AgeableMob entity) {
 		ZombieWolf wolf = PCEntityTypes.ZOMBIE_WOLF.get().create(world);
+		if (this.random.nextBoolean()) {
+			wolf.setVariant(this.getVariant());
+		} else {
+			wolf.setVariant(wolf.getVariant());
+		}
 		UUID uuid = this.getOwnerUUID();
 		if (uuid != null) {
 			wolf.setOwnerUUID(uuid);
-			wolf.setTame(true);
+			wolf.setTame(true, false);
 		}
 
 		return wolf;
@@ -83,16 +88,11 @@ public class ZombieWolf extends Wolf {
 	}
 
 	@Override
-	public MobType getMobType() {
-		return MobType.UNDEAD;
-	}
-
-	@Override
 	public void tick() {
 		if (!this.level().isClientSide && this.isAlive() && this.isConverting()) {
 			int i = PCUtil.getConversionProgress(this);
 			this.conversionTime -= i;
-			if (this.conversionTime <= 0 && ForgeEventFactory.canLivingConvert(this, EntityType.WOLF, (timer) -> this.conversionTime = timer)) {
+			if (this.conversionTime <= 0 && EventHooks.canLivingConvert(this, EntityType.WOLF, (timer) -> this.conversionTime = timer)) {
 				this.cureZombie((ServerLevel) this.level());
 			}
 		}
@@ -150,7 +150,8 @@ public class ZombieWolf extends Wolf {
 
 	private void cureZombie(ServerLevel world) {
 		Wolf wolf = this.copyEntityData();
-		wolf.finalizeSpawn(world, world.getCurrentDifficultyAt(wolf.blockPosition()), MobSpawnType.CONVERSION, null, null);
+		wolf.finalizeSpawn(world, world.getCurrentDifficultyAt(wolf.blockPosition()), MobSpawnType.CONVERSION, null);
+		wolf.setVariant(this.getVariant());
 
 		if (this.conversionStarter != null) {
 			Player player = this.level().getPlayerByUUID(this.conversionStarter);
@@ -164,13 +165,13 @@ public class ZombieWolf extends Wolf {
 			world.levelEvent(null, 1027, this.blockPosition(), 0);
 		}
 
-		ForgeEventFactory.onLivingConvert(this, wolf);
+		EventHooks.onLivingConvert(this, wolf);
 	}
 
 	public Wolf copyEntityData() {
 		Wolf wolf = this.convertTo(EntityType.WOLF, false);
 		wolf.setCollarColor(this.getCollarColor());
-		wolf.setTame(this.isTame());
+		wolf.setTame(this.isTame(), false);
 		wolf.setOrderedToSit(this.isOrderedToSit());
 		if (this.getOwner() != null)
 			wolf.setOwnerUUID(this.getOwner().getUUID());

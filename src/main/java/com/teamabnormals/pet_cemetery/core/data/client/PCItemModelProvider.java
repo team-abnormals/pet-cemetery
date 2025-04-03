@@ -2,12 +2,12 @@ package com.teamabnormals.pet_cemetery.core.data.client;
 
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class PCItemModelProvider extends ItemModelProvider {
 
@@ -28,13 +28,13 @@ public class PCItemModelProvider extends ItemModelProvider {
 	}
 
 	private void generatedWithOverlay(ItemLike item) {
-		ResourceLocation itemName = ForgeRegistries.ITEMS.getKey(item.asItem());
+		ResourceLocation itemName = BuiltInRegistries.ITEM.getKey(item.asItem());
 		this.withExistingParent(itemName.getPath(), "item/generated")
-				.texture("layer0", new ResourceLocation(this.modid, "item/" + itemName.getPath()))
-				.texture("layer1", new ResourceLocation(this.modid, "item/" + itemName.getPath() + "_overlay"));
+				.texture("layer0", ResourceLocation.fromNamespaceAndPath(this.modid, "item/" + itemName.getPath()))
+				.texture("layer1", ResourceLocation.fromNamespaceAndPath(this.modid, "item/" + itemName.getPath() + "_overlay"));
 	}
 
 	private void spawnEgg(ItemLike item) {
-		this.withExistingParent(ForgeRegistries.ITEMS.getKey(item.asItem()).getPath(), "item/template_spawn_egg");
+		this.withExistingParent(BuiltInRegistries.ITEM.getKey(item.asItem()).getPath(), "item/template_spawn_egg");
 	}
 }

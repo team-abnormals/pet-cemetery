@@ -3,13 +3,12 @@ package com.teamabnormals.pet_cemetery.core.data.client;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class PCLanguageProvider extends LanguageProvider {
@@ -31,15 +30,15 @@ public class PCLanguageProvider extends LanguageProvider {
 
 	private void add(Item... entries) {
 		for (Item entry : entries) {
-			if (ForgeRegistries.ITEMS.getKey(entry) != null)
-				this.add(entry, format(ForgeRegistries.ITEMS.getKey(entry)));
+			if (BuiltInRegistries.ITEM.getKey(entry) != null)
+				this.add(entry, format(BuiltInRegistries.ITEM.getKey(entry)));
 		}
 	}
 
 	private void add(EntityType<?>... entries) {
 		for (EntityType<?> entry : entries) {
-			if (ForgeRegistries.ENTITY_TYPES.getKey(entry) != null)
-				this.add(entry, format(ForgeRegistries.ENTITY_TYPES.getKey(entry)));
+			if (BuiltInRegistries.ENTITY_TYPE.getKey(entry) != null)
+				this.add(entry, format(BuiltInRegistries.ENTITY_TYPE.getKey(entry)));
 		}
 	}
 

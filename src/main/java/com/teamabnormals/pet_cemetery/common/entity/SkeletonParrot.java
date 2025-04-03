@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Parrot;
@@ -38,15 +37,10 @@ public class SkeletonParrot extends Parrot {
 
 		if (this.isTame()) {
 			parrot.setOwnerUUID(this.getOwnerUUID());
-			parrot.setTame(true);
+			parrot.setTame(true, false);
 		}
 
 		return parrot;
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEAD;
 	}
 
 	@Override

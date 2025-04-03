@@ -8,8 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Cat;
 
 public class UndeadCatRenderer extends CatRenderer {
-	private static final ResourceLocation ZOMBIE_CAT_TEXTURE = new ResourceLocation(PetCemetery.MOD_ID, "textures/entity/cat/zombie_cat.png");
-	private static final ResourceLocation SKELETON_CAT_TEXTURE = new ResourceLocation(PetCemetery.MOD_ID, "textures/entity/cat/skeleton_cat.png");
+	private static final ResourceLocation ZOMBIE_CAT_TEXTURE = PetCemetery.location("textures/entity/cat/zombie_cat.png");
+	private static final ResourceLocation SKELETON_CAT_TEXTURE = PetCemetery.location("textures/entity/cat/skeleton_cat.png");
 
 	public UndeadCatRenderer(EntityRendererProvider.Context context) {
 		super(context);

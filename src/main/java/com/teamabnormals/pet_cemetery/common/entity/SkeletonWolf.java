@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Wolf;
@@ -32,18 +31,19 @@ public class SkeletonWolf extends Wolf {
 	@Override
 	public SkeletonWolf getBreedOffspring(ServerLevel world, AgeableMob entity) {
 		SkeletonWolf wolf = PCEntityTypes.SKELETON_WOLF.get().create(world);
+		if (this.random.nextBoolean()) {
+			wolf.setVariant(this.getVariant());
+		} else {
+			wolf.setVariant(wolf.getVariant());
+		}
+
 		UUID uuid = this.getOwnerUUID();
 		if (uuid != null) {
 			wolf.setOwnerUUID(uuid);
-			wolf.setTame(true);
+			wolf.setTame(true, false);
 		}
 
 		return wolf;
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEAD;
 	}
 
 	@Override
