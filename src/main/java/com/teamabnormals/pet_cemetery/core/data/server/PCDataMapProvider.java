@@ -23,6 +23,9 @@ public class PCDataMapProvider extends DataMapProvider {
 				.add(EntityType.PARROT.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_PARROT), false)
 				.add(PCEntityTypes.ZOMBIE_WOLF, new PetRespawn(PCEntityTypes.SKELETON_WOLF), false)
 				.add(PCEntityTypes.ZOMBIE_CAT, new PetRespawn(PCEntityTypes.SKELETON_CAT), false)
-				.add(PCEntityTypes.ZOMBIE_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false);
+				.add(PCEntityTypes.ZOMBIE_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false)
+				.add(PCEntityTypes.SKELETON_WOLF, new PetRespawn(PCEntityTypes.SKELETON_WOLF), false)
+				.add(PCEntityTypes.SKELETON_CAT, new PetRespawn(PCEntityTypes.SKELETON_CAT), false)
+				.add(PCEntityTypes.SKELETON_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false);
 	}
 }
