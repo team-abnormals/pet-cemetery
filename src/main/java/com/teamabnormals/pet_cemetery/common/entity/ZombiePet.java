@@ -122,7 +122,7 @@ public interface ZombiePet {
 				}
 
 				if (!zombie.level().isClientSide) {
-					this.startConverting(player.getUUID(), 60); //zombie.getRandom().nextInt(2401) + 3600);
+					this.startConverting(player.getUUID(), zombie.getRandom().nextInt(2401) + 3600);
 				}
 
 				return InteractionResult.SUCCESS;
