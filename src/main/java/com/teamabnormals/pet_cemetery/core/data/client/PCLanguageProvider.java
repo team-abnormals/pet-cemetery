@@ -1,20 +1,17 @@
 package com.teamabnormals.pet_cemetery.core.data.client;
 
+import com.teamabnormals.blueprint.core.data.client.BlueprintLanguageProvider;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.data.LanguageProvider;
-import org.apache.commons.lang3.text.WordUtils;
 
-public class PCLanguageProvider extends LanguageProvider {
+public class PCLanguageProvider extends BlueprintLanguageProvider {
 
 	public PCLanguageProvider(PackOutput output) {
-		super(output, PetCemetery.MOD_ID, "en_us");
+		super(output, PetCemetery.MOD_ID);
 	}
 
 	@Override
@@ -23,22 +20,14 @@ public class PCLanguageProvider extends LanguageProvider {
 		this.add(PCItems.ZOMBIE_WOLF_SPAWN_EGG.get(), PCItems.ZOMBIE_CAT_SPAWN_EGG.get(), PCItems.ZOMBIE_PARROT_SPAWN_EGG.get(), PCItems.SKELETON_WOLF_SPAWN_EGG.get(), PCItems.SKELETON_CAT_SPAWN_EGG.get(), PCItems.SKELETON_PARROT_SPAWN_EGG.get());
 		this.add(PCEntityTypes.ZOMBIE_WOLF.get(), PCEntityTypes.ZOMBIE_CAT.get(), PCEntityTypes.ZOMBIE_PARROT.get(), PCEntityTypes.SKELETON_WOLF.get(), PCEntityTypes.SKELETON_CAT.get(), PCEntityTypes.SKELETON_PARROT.get());
 		this.add("tooltip." + PetCemetery.MOD_ID + ".baby", "Baby");
-		this.addAdvancement("nether.respawn_pet", "Frankenweenie", "Respawn a pet using a Pet Collar at a Respawn Anchor");
+		this.addAdvancement("nether.respawned_pet", "Frankenweenie", "Respawn a pet using a Pet Collar at a Respawn Anchor");
 		this.addAdvancement("nether.cured_zombie_pet", "Zombie Veterinarian", "Weaken and then cure a Zombie pet");
-		this.addAdvancement("nether.respawn_zombie_pet", "Grim Reaper", "Respawn a Zombie pet as a Skeleton");
-	}
-
-	private void add(Item... entries) {
-		for (Item entry : entries) {
-			if (BuiltInRegistries.ITEM.getKey(entry) != null)
-				this.add(entry, format(BuiltInRegistries.ITEM.getKey(entry)));
-		}
+		this.addAdvancement("nether.respawned_zombie_pet", "Grim Reaper", "Respawn a Zombie pet as a Skeleton");
 	}
 
 	private void add(EntityType<?>... entries) {
 		for (EntityType<?> entry : entries) {
-			if (BuiltInRegistries.ENTITY_TYPE.getKey(entry) != null)
-				this.add(entry, format(BuiltInRegistries.ENTITY_TYPE.getKey(entry)));
+			this.add(entry, format(BuiltInRegistries.ENTITY_TYPE.getKey(entry)));
 		}
 	}
 
@@ -46,9 +35,5 @@ public class PCLanguageProvider extends LanguageProvider {
 		String intro = "advancements." + PetCemetery.MOD_ID + "." + key + ".";
 		this.add(intro + "title", title);
 		this.add(intro + "description", description);
-	}
-
-	private String format(ResourceLocation registryName) {
-		return WordUtils.capitalizeFully(registryName.getPath().replace("_", " "));
 	}
 }

@@ -1,0 +1,32 @@
+{
+  "parent": "pet_cemetery:nether/respawned_pet",
+  "criteria": {
+    "cured_zombie_pet": {
+      "trigger": "pet_cemetery:cured_zombie_pet"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.pet_cemetery.nether.cured_zombie_pet.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "components": {
+        "pet_cemetery:pet_data": {
+          "CollarColor": 13
+        }
+      },
+      "count": 1,
+      "id": "pet_cemetery:pet_collar"
+    },
+    "title": {
+      "translate": "advancements.pet_cemetery.nether.cured_zombie_pet.title"
+    }
+  },
+  "requirements": [
+    [
+      "cured_zombie_pet"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

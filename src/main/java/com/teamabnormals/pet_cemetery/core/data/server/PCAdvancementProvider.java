@@ -1,16 +1,19 @@
 package com.teamabnormals.pet_cemetery.core.data.server;
 
-import com.teamabnormals.pet_cemetery.common.advancement.CuredZombiePetTrigger;
-import com.teamabnormals.pet_cemetery.common.advancement.RespawnPetTrigger;
+import com.teamabnormals.pet_cemetery.common.advancement.ConvertedMobTrigger;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.PCUtil;
+import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate.Builder;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -21,6 +24,7 @@ import net.neoforged.neoforge.common.data.AdvancementProvider.AdvancementGenerat
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -33,16 +37,23 @@ public class PCAdvancementProvider implements AdvancementGenerator {
 	@Override
 	public void generate(Provider registries, Consumer<AdvancementHolder> consumer, ExistingFileHelper existingFileHelper) {
 		ItemStack stack = new ItemStack(PCItems.PET_COLLAR.get());
-		createAdvancement("respawn_pet", "nether", ResourceLocation.withDefaultNamespace("nether/charge_respawn_anchor"), stack, AdvancementType.TASK, true, true, false)
-				.addCriterion().save(consumer, PetCemetery.MOD_ID + ":nether/respawn_pet");
+		CompoundTag tag = new CompoundTag();
 
-		stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag().putInt(PCUtil.COLLAR_COLOR, DyeColor.GREEN.getId());
-		createAdvancement("cured_zombie_pet", "nether", PetCemetery.location("nether/respawn_pet"), stack, AdvancementType.TASK, true, true, false)
-				.addCriterion().save(consumer, PetCemetery.MOD_ID + ":nether/cured_zombie_pet");;
+		createAdvancement("respawned_pet", "nether", ResourceLocation.withDefaultNamespace("nether/charge_respawn_anchor"), stack, AdvancementType.TASK, true, true, false)
+				.addCriterion("respawned_pet", ConvertedMobTrigger.TriggerInstance.respawnedPet())
+				.save(consumer, PetCemetery.MOD_ID + ":nether/respawned_pet");
 
-		stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag().putInt(PCUtil.COLLAR_COLOR, DyeColor.GREEN.getId());
-		createAdvancement("respawn_zombie_pet", "nether", PetCemetery.location("nether/respawn_pet"), stack, AdvancementType.TASK, true, true, false)
-				.addCriterion().save(consumer, PetCemetery.MOD_ID + ":nether/respawn_zombie_pet");;
+		tag.putInt(PCUtil.COLLAR_COLOR, DyeColor.GREEN.getId());
+		stack.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
+		createAdvancement("cured_zombie_pet", "nether", PetCemetery.location("nether/respawned_pet"), stack, AdvancementType.GOAL, true, true, false)
+				.addCriterion("cured_zombie_pet", ConvertedMobTrigger.TriggerInstance.curedZombiePet())
+				.save(consumer, PetCemetery.MOD_ID + ":nether/cured_zombie_pet");
+
+		tag.putInt(PCUtil.COLLAR_COLOR, DyeColor.WHITE.getId());
+		stack.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
+		createAdvancement("respawned_zombie_pet", "nether", PetCemetery.location("nether/respawned_pet"), stack, AdvancementType.TASK, true, true, false)
+				.addCriterion("respawned_zombie_pet", ConvertedMobTrigger.TriggerInstance.respawnedPet(Optional.of(EntityPredicate.wrap(Builder.entity().of(PCEntityTypeTags.SKELETON_PETS)))))
+				.save(consumer, PetCemetery.MOD_ID + ":nether/respawned_zombie_pet");
 	}
 
 

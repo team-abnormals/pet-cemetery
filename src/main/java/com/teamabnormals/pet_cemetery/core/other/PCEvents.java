@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
+import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
+import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes.PetRespawn;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.core.Holder.Reference;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,10 +21,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.*;
@@ -66,7 +65,7 @@ public class PCEvents {
 		LivingEntity entity = event.getEntity();
 		EntityType<?> type = entity.getType();
 
-		if (type.is(PCEntityTypeTags.DROPS_PET_COLLAR)) {
+		if (type.builtInRegistryHolder().getData(PCEntityTypes.RESPAWNABLE_PETS) != null) {
 			ItemStack collar = new ItemStack(PCItems.PET_COLLAR.get());
 			CompoundTag tag = new CompoundTag();
 			tag.putString(PCUtil.PET_ID, BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
@@ -90,6 +89,9 @@ public class PCEvents {
 				}
 				collar.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
 				entity.spawnAtLocation(collar);
+			} else if (entity.getType().is(PCEntityTypeTags.CAN_DROP_COLLAR_UNTAMED)) {
+				collar.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
+				entity.spawnAtLocation(collar);
 			}
 		}
 	}
@@ -108,53 +110,51 @@ public class PCEvents {
 			CompoundTag tag = stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag();
 
 			if (tag.contains(PCUtil.PET_ID)) {
-				EntityType<?> entityType = PCUtil.UNDEAD_MAP.get(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(tag.getString(PCUtil.PET_ID))));
+				Optional<Reference<EntityType<?>>> entityHolder = BuiltInRegistries.ENTITY_TYPE.getHolder(ResourceLocation.parse(tag.getString(PCUtil.PET_ID)));
+				if (entityHolder.isPresent()) {
+					PetRespawn petRespawn = entityHolder.get().getData(PCEntityTypes.RESPAWNABLE_PETS);
+					if (petRespawn != null && petRespawn.respawnedAs().value().create(level) instanceof LivingEntity entity) {
+						UUID owner = tag.contains(PCUtil.OWNER_ID) ? UUID.fromString(tag.getString(PCUtil.OWNER_ID)) : player.getUUID();
+						DyeColor collarColor = DyeColor.byId(tag.getInt(PCUtil.COLLAR_COLOR));
 
-				if (entityType != null) {
-					Animal entity = (Animal) entityType.create(level);
-					UUID owner = tag.contains(PCUtil.OWNER_ID) ? UUID.fromString(tag.getString(PCUtil.OWNER_ID)) : player.getUUID();
-					DyeColor collarColor = DyeColor.byId(tag.getInt(PCUtil.COLLAR_COLOR));
+						if (entity instanceof AgeableMob ageable) {
+							ageable.setBaby(tag.getBoolean(PCUtil.IS_CHILD));
+						}
+						entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
+						if (stack.has(DataComponents.CUSTOM_NAME)) {
+							entity.setCustomName(stack.getHoverName());
+						}
 
-					entity.setBaby(tag.getBoolean(PCUtil.IS_CHILD));
-					entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
-					if (stack.has(DataComponents.CUSTOM_NAME)) {
-						entity.setCustomName(stack.getHoverName());
-					}
-					TamableAnimal respawnedEntity = null;
-					if (entity instanceof TamableAnimal pet) {
-						pet.setTame(true, false);
-						pet.setOwnerUUID(owner);
-						if (pet instanceof Cat cat) {
-							Optional<Registry<CatVariant>> registry = level.registryAccess().registry(Registries.CAT_VARIANT);
-							if (registry.isPresent()) {
-								CatVariant variant = registry.get().get(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
-								Holder<CatVariant> variantHolder = registry.get().wrapAsHolder(variant);
-								if (variant != null) {
-									cat.setVariant(variantHolder);
-									cat.setCollarColor(collarColor);
-									respawnedEntity = cat;
+						if (entity instanceof TamableAnimal pet) {
+							pet.setTame(true, false);
+							pet.setOwnerUUID(owner);
+							switch (pet) {
+								case Cat cat -> {
+									Registry<CatVariant> registry = level.registryAccess().registryOrThrow(Registries.CAT_VARIANT);
+									Optional<Reference<CatVariant>> variant = registry.getHolder(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
+									if (variant.isPresent()) {
+										cat.setVariant(variant.get());
+										cat.setCollarColor(collarColor);
+									}
 								}
-							}
-						} else if (pet instanceof Parrot parrot) {
-							parrot.setVariant(Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)));
-							respawnedEntity = parrot;
-						} else if (pet instanceof Wolf wolf) {
-							Optional<Registry<WolfVariant>> registry = level.registryAccess().registry(Registries.WOLF_VARIANT);
-							if (registry.isPresent()) {
-								WolfVariant variant = registry.get().get(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
-								Holder<WolfVariant> variantHolder = registry.get().wrapAsHolder(variant);
-								if (variant != null) {
-									wolf.setVariant(variantHolder);
-									wolf.setCollarColor(collarColor);
-									respawnedEntity = wolf;
+								case Wolf wolf -> {
+									Registry<WolfVariant> registry = level.registryAccess().registryOrThrow(Registries.WOLF_VARIANT);
+									Optional<Reference<WolfVariant>> variant = registry.getHolder(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
+									if (variant.isPresent()) {
+										wolf.setVariant(variant.get());
+										wolf.setCollarColor(collarColor);
+									}
+								}
+								case Parrot parrot -> {
+									parrot.setVariant(Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)));
+								}
+								default -> {
 								}
 							}
 						}
-					}
 
-					if (respawnedEntity != null) {
 						if (player instanceof ServerPlayer serverPlayer) {
-							PCCriteriaTriggers.RESPAWN_PET.trigger(serverPlayer, entity, respawnedEntity);
+							PCCriteriaTriggers.RESPAWNED_PET.get().trigger(serverPlayer, entity, entity);
 						}
 
 						level.setBlockAndUpdate(pos, state.setValue(RespawnAnchorBlock.CHARGE, state.getValue(RespawnAnchorBlock.CHARGE) - 1));
@@ -163,11 +163,11 @@ public class PCEvents {
 							double d0 = random.nextGaussian() * 0.025D;
 							double d1 = random.nextGaussian() * 0.025D;
 							double d2 = random.nextGaussian() * 0.025D;
-							level.addParticle(ParticleTypes.LARGE_SMOKE, respawnedEntity.getRandomX(0.75D), respawnedEntity.getRandomY(), respawnedEntity.getRandomZ(0.75D), d0, d1, d2);
+							level.addParticle(ParticleTypes.LARGE_SMOKE, entity.getRandomX(0.75D), entity.getRandomY(), entity.getRandomZ(0.75D), d0, d1, d2);
 						}
 
 						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
-						level.addFreshEntity(respawnedEntity);
+						level.addFreshEntity(entity);
 						if (!player.getAbilities().instabuild)
 							stack.shrink(1);
 

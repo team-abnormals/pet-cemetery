@@ -11,7 +11,8 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import static com.teamabnormals.blueprint.core.util.item.ItemStackUtil.is;
-import static net.minecraft.world.item.CreativeModeTabs.*;
+import static net.minecraft.world.item.CreativeModeTabs.SPAWN_EGGS;
+import static net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES;
 import static net.minecraft.world.item.crafting.Ingredient.of;
 
 public class PCItems {

@@ -13,8 +13,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.level.Level;
 
-import java.util.UUID;
-
 public class SkeletonWolf extends Wolf {
 
 	public SkeletonWolf(EntityType<? extends SkeletonWolf> type, Level worldIn) {
@@ -29,18 +27,15 @@ public class SkeletonWolf extends Wolf {
 	}
 
 	@Override
-	public SkeletonWolf getBreedOffspring(ServerLevel world, AgeableMob entity) {
+	public SkeletonWolf getBreedOffspring(ServerLevel world, AgeableMob ageableMob) {
 		SkeletonWolf wolf = PCEntityTypes.SKELETON_WOLF.get().create(world);
-		if (this.random.nextBoolean()) {
-			wolf.setVariant(this.getVariant());
-		} else {
-			wolf.setVariant(wolf.getVariant());
-		}
-
-		UUID uuid = this.getOwnerUUID();
-		if (uuid != null) {
-			wolf.setOwnerUUID(uuid);
-			wolf.setTame(true, false);
+		if (wolf != null && ageableMob instanceof Wolf parent) {
+			wolf.setVariant(this.random.nextBoolean() ? this.getVariant() : parent.getVariant());
+			if (this.isTame()) {
+				wolf.setOwnerUUID(this.getOwnerUUID());
+				wolf.setTame(true, true);
+				wolf.setCollarColor(this.random.nextBoolean() ? this.getCollarColor() : parent.getCollarColor());
+			}
 		}
 
 		return wolf;

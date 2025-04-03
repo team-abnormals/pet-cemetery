@@ -2,8 +2,8 @@ package com.teamabnormals.pet_cemetery.common.item;
 
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.PCUtil;
+import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
-import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -35,33 +35,32 @@ public class PetCollarItem extends Item {
 		if (tag.contains(PCUtil.PET_ID)) {
 			String petID = tag.getString(PCUtil.PET_ID);
 			EntityType<?> pet = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(petID));
-
-			Component petType = Component.translatable(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY);
+			tooltip.add(Component.translatable(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY));
 			if (tag.contains(PCUtil.PET_VARIANT)) {
 				String texture = "";
 
-				if (pet == EntityType.CAT || pet == PCEntityTypes.ZOMBIE_CAT.get()) {
+				if (pet.is(PCEntityTypeTags.CATS)) {
 					ResourceLocation catVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
 					texture = catVariant.getPath();
 				}
 
-				if (pet == EntityType.PARROT || pet == PCEntityTypes.ZOMBIE_PARROT.get()) {
+				if (pet.is(PCEntityTypeTags.PARROTS)) {
 					texture = Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)).getSerializedName();
 				}
 
-				if (pet == EntityType.WOLF || pet == PCEntityTypes.ZOMBIE_WOLF.get()) {
+				if (pet.is(PCEntityTypeTags.WOLVES)) {
 					ResourceLocation wolfVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
 					texture = wolfVariant.getPath();
 				}
 
+
 				texture = texture.replace("_", " ").concat(" ");
-				petType = Component.literal(WordUtils.capitalize(texture)).withStyle(ChatFormatting.GRAY).append(petType);
+				tooltip.add(Component.literal(WordUtils.capitalize(texture)).withStyle(ChatFormatting.GRAY));
 			}
 
-			if (tag.getBoolean(PCUtil.IS_CHILD))
-				petType = Component.translatable("tooltip." + PetCemetery.MOD_ID + ".baby").withStyle(ChatFormatting.GRAY).append(" ").append(petType);
-
-			tooltip.add(petType);
+			if (tag.getBoolean(PCUtil.IS_CHILD)) {
+				tooltip.add(Component.translatable("tooltip." + PetCemetery.MOD_ID + ".baby").withStyle(ChatFormatting.GRAY));
+			}
 		}
 
 		super.appendHoverText(stack, context, tooltip, flagIn);

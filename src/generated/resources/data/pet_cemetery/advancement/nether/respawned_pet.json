@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:nether/charge_respawn_anchor",
+  "criteria": {
+    "respawned_pet": {
+      "trigger": "pet_cemetery:respawned_pet"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.pet_cemetery.nether.respawned_pet.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "pet_cemetery:pet_collar"
+    },
+    "title": {
+      "translate": "advancements.pet_cemetery.nether.respawned_pet.title"
+    }
+  },
+  "requirements": [
+    [
+      "respawned_pet"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

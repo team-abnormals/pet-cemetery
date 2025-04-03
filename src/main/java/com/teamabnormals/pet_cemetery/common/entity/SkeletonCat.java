@@ -27,21 +27,14 @@ public class SkeletonCat extends Cat {
 	}
 
 	@Override
-	public SkeletonCat getBreedOffspring(ServerLevel world, AgeableMob entity) {
+	public SkeletonCat getBreedOffspring(ServerLevel world, AgeableMob ageableMob) {
 		SkeletonCat cat = PCEntityTypes.SKELETON_CAT.get().create(world);
-		if (this.random.nextBoolean()) {
-			cat.setVariant(this.getVariant());
-		} else {
-			cat.setVariant(cat.getVariant());
-		}
-
-		if (this.isTame()) {
-			cat.setOwnerUUID(this.getOwnerUUID());
-			cat.setTame(true, false);
-			if (this.random.nextBoolean()) {
-				cat.setCollarColor(this.getCollarColor());
-			} else {
-				cat.setCollarColor(cat.getCollarColor());
+		if (cat != null && ageableMob instanceof Cat parent) {
+			cat.setVariant(this.random.nextBoolean() ? this.getVariant() : parent.getVariant());
+			if (this.isTame()) {
+				cat.setOwnerUUID(this.getOwnerUUID());
+				cat.setTame(true, true);
+				cat.setCollarColor(this.random.nextBoolean() ? this.getCollarColor() : parent.getCollarColor());
 			}
 		}
 

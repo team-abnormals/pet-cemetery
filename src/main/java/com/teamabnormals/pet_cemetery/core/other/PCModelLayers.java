@@ -14,6 +14,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 @EventBusSubscriber(modid = PetCemetery.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class PCModelLayers {
+
 	@SubscribeEvent
 	public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(PCEntityTypes.ZOMBIE_WOLF.get(), UndeadWolfRenderer::new);
@@ -23,6 +24,7 @@ public class PCModelLayers {
 		event.registerEntityRenderer(PCEntityTypes.SKELETON_CAT.get(), UndeadCatRenderer::new);
 		event.registerEntityRenderer(PCEntityTypes.SKELETON_PARROT.get(), UndeadParrotRenderer::new);
 	}
+
 	@SubscribeEvent
 	public static void registerLayers(EntityRenderersEvent.AddLayers event) {
 		event.getSkins().forEach(skin -> {

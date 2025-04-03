@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
 
 public class PCClientCompat {
+
 	public static void register() {
 		PCItems.setupTabEditors();
 		registerItemColors();
