@@ -6,11 +6,9 @@ import com.teamabnormals.pet_cemetery.common.item.PetCollarItem;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 
-import static com.teamabnormals.blueprint.core.util.item.ItemStackUtil.is;
 import static net.minecraft.world.item.CreativeModeTabs.SPAWN_EGGS;
 import static net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES;
 import static net.minecraft.world.item.crafting.Ingredient.of;
@@ -34,6 +32,6 @@ public class PCItems {
 				.tab(TOOLS_AND_UTILITIES)
 				.addItemsBefore(of(Items.SADDLE), PET_COLLAR)
 				.tab(SPAWN_EGGS)
-				.addItemsAlphabetically(is(SpawnEggItem.class), ZOMBIE_WOLF_SPAWN_EGG, ZOMBIE_CAT_SPAWN_EGG, ZOMBIE_PARROT_SPAWN_EGG, SKELETON_WOLF_SPAWN_EGG, SKELETON_CAT_SPAWN_EGG, SKELETON_PARROT_SPAWN_EGG);
+				.addSpawnEggsAlphabetically(ZOMBIE_WOLF_SPAWN_EGG, ZOMBIE_CAT_SPAWN_EGG, ZOMBIE_PARROT_SPAWN_EGG, SKELETON_WOLF_SPAWN_EGG, SKELETON_CAT_SPAWN_EGG, SKELETON_PARROT_SPAWN_EGG);
 	}
 }
