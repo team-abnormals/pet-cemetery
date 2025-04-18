@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -29,6 +30,7 @@ public class PCEntityTypeTagsProvider extends EntityTypeTagsProvider {
 		this.tag(PCEntityTypeTags.CATS).add(EntityType.CAT, ZOMBIE_CAT.get(), SKELETON_CAT.get());
 		this.tag(PCEntityTypeTags.PARROTS).add(EntityType.PARROT, ZOMBIE_PARROT.get(), SKELETON_PARROT.get());
 
-		this.tag(EntityTypeTags.UNDEAD).addTag(PCEntityTypeTags.ZOMBIE_PETS).addTag(PCEntityTypeTags.SKELETON_PETS);
+		this.tag(EntityTypeTags.ZOMBIES).addTag(PCEntityTypeTags.ZOMBIE_PETS);
+		this.tag(EntityTypeTags.SKELETONS).addTag(PCEntityTypeTags.SKELETON_PETS);
 	}
 }
