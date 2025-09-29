@@ -19,4 +19,9 @@ public class UndeadWolfRenderer extends WolfRenderer {
 	public ResourceLocation getTextureLocation(Wolf entity) {
 		return entity instanceof ZombieWolf ? ZOMBIE_WOLF_TEXTURE : SKELETON_WOLF_TEXTURE;
 	}
+
+	@Override
+	protected boolean isShaking(Wolf wolf) {
+		return super.isShaking(wolf) || wolf instanceof ZombieWolf zombieWolf && zombieWolf.isConverting();
+	}
 }

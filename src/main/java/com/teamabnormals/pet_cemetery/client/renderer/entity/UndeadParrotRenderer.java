@@ -19,4 +19,9 @@ public class UndeadParrotRenderer extends ParrotRenderer {
 	public ResourceLocation getTextureLocation(Parrot entity) {
 		return entity instanceof ZombieParrot ? ZOMBIE_PARROT_TEXTURE : SKELETON_PARROT_TEXTURE;
 	}
+
+	@Override
+	protected boolean isShaking(Parrot parrot) {
+		return super.isShaking(parrot) || parrot instanceof ZombieParrot zombieParrot && zombieParrot.isConverting();
+	}
 }

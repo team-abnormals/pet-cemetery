@@ -19,4 +19,9 @@ public class UndeadCatRenderer extends CatRenderer {
 	public ResourceLocation getTextureLocation(Cat entity) {
 		return entity instanceof ZombieCat ? ZOMBIE_CAT_TEXTURE : SKELETON_CAT_TEXTURE;
 	}
+
+	@Override
+	protected boolean isShaking(Cat cat) {
+		return super.isShaking(cat) || cat instanceof ZombieCat zombieCat && zombieCat.isConverting();
+	}
 }
