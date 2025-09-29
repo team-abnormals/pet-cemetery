@@ -9,14 +9,14 @@
   "entity.pet_cemetery.skeleton_parrot": "Papagaio Esqueleto",
   "entity.pet_cemetery.skeleton_wolf": "Lobo Esqueleto",
   "entity.pet_cemetery.zombie_cat": "Gato Zumbi",
-  "entity.pet_cemetery.zombie_parrot": "Lobo Zumbi",
+  "entity.pet_cemetery.zombie_parrot": "Papagaio Zumbi",
   "entity.pet_cemetery.zombie_wolf": "Lobo Zumbi",
   "item.pet_cemetery.pet_collar": "Coleira",
   "item.pet_cemetery.skeleton_cat_spawn_egg": "Ovo Gerador de Gato Esqueleto",
   "item.pet_cemetery.skeleton_parrot_spawn_egg": "Ovo Gerador de Papagaio Esqueleto",
   "item.pet_cemetery.skeleton_wolf_spawn_egg": "Ovo Gerador de Lobo Esqueleto",
   "item.pet_cemetery.zombie_cat_spawn_egg": "Ovo Gerador de Gato Zumbi",
-  "item.pet_cemetery.zombie_parrot_spawn_egg": "Ovo Gerador de Lobo Zumbi",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Ovo Gerador de Papagaio Zumbi",
   "item.pet_cemetery.zombie_wolf_spawn_egg": "Ovo Gerador de Lobo Zumbi",
   "tooltip.pet_cemetery.baby": "Filhote"
 }
