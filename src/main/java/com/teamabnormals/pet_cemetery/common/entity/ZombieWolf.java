@@ -40,6 +40,16 @@ public class ZombieWolf extends Wolf implements ZombiePet {
 	}
 
 	@Override
+	protected void applyTamingSideEffects() {
+		if (this.isTame()) {
+			this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0D + PCUtil.HEALTH_DIFF * 5.0D);
+			this.setHealth((float) (40.0F + (PCUtil.HEALTH_DIFF * 5.0D)));
+		} else {
+			this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0D + PCUtil.HEALTH_DIFF);
+		}
+	}
+
+	@Override
 	public EntityType<? extends LivingEntity> getConversionType() {
 		return EntityType.WOLF;
 	}
@@ -64,7 +74,7 @@ public class ZombieWolf extends Wolf implements ZombiePet {
 		Wolf wolf = this.convertTo(EntityType.WOLF, false);
 		if (wolf != null) {
 			wolf.setCollarColor(this.getCollarColor());
-			wolf.setTame(this.isTame(), false);
+			wolf.setTame(this.isTame(), true);
 			wolf.setOrderedToSit(this.isOrderedToSit());
 			if (this.getOwner() != null)
 				wolf.setOwnerUUID(this.getOwner().getUUID());

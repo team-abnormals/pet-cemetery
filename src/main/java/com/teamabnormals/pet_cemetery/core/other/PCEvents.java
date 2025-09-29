@@ -126,7 +126,7 @@ public class PCEvents {
 						}
 
 						if (entity instanceof TamableAnimal pet) {
-							pet.setTame(true, false);
+							pet.setTame(true, true);
 							pet.setOwnerUUID(owner);
 							switch (pet) {
 								case Cat cat -> {

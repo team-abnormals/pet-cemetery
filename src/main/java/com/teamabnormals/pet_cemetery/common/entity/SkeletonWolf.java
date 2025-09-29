@@ -27,6 +27,16 @@ public class SkeletonWolf extends Wolf {
 	}
 
 	@Override
+	protected void applyTamingSideEffects() {
+		if (this.isTame()) {
+			this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0D - PCUtil.HEALTH_DIFF * 5.0D);
+			this.setHealth((float) (40.0F - (PCUtil.HEALTH_DIFF * 5.0D)));
+		} else {
+			this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8.0D - PCUtil.HEALTH_DIFF);
+		}
+	}
+
+	@Override
 	public SkeletonWolf getBreedOffspring(ServerLevel world, AgeableMob ageableMob) {
 		SkeletonWolf wolf = PCEntityTypes.SKELETON_WOLF.get().create(world);
 		if (wolf != null && ageableMob instanceof Wolf parent) {

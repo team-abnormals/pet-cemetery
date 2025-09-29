@@ -64,7 +64,7 @@ public class ZombieCat extends Cat implements ZombiePet {
 		Cat cat = this.convertTo(EntityType.CAT, false);
 		if (cat != null) {
 			cat.setCollarColor(this.getCollarColor());
-			cat.setTame(this.isTame(), false);
+			cat.setTame(this.isTame(), true);
 			cat.setOrderedToSit(this.isOrderedToSit());
 			if (this.getOwner() != null)
 				cat.setOwnerUUID(this.getOwner().getUUID());

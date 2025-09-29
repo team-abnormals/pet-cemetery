@@ -46,7 +46,7 @@ public class ZombieParrot extends Parrot implements ZombiePet {
 	public Parrot finalizeConversionSpawn(ServerLevel level) {
 		Parrot parrot = this.convertTo(EntityType.PARROT, false);
 		if (parrot != null) {
-			parrot.setTame(this.isTame(), false);
+			parrot.setTame(this.isTame(), true);
 			parrot.setOrderedToSit(this.isOrderedToSit());
 			if (this.getOwner() != null)
 				parrot.setOwnerUUID(this.getOwner().getUUID());
