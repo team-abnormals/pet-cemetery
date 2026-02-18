@@ -1,0 +1,22 @@
+{
+  "advancements.pet_cemetery.nether.cured_zombie_pet.description": "Heikennä ja paranna zombilemmikki",
+  "advancements.pet_cemetery.nether.cured_zombie_pet.title": "Zombieläinlääkäri",
+  "advancements.pet_cemetery.nether.respawned_pet.description": "Uudelleensynnytä lemmikki käyttämällä lemmikin kaulapantaa uudelleensyntymisankkuriin",
+  "advancements.pet_cemetery.nether.respawned_pet.title": "Frankenweenie",
+  "advancements.pet_cemetery.nether.respawned_zombie_pet.description": "Uudelleensynnytä zombilemmikki luurankona",
+  "advancements.pet_cemetery.nether.respawned_zombie_pet.title": "Viikatemies",
+  "entity.pet_cemetery.skeleton_cat": "Luurankokissa",
+  "entity.pet_cemetery.skeleton_parrot": "Luurankopapukaija",
+  "entity.pet_cemetery.skeleton_wolf": "Luurankosusi",
+  "entity.pet_cemetery.zombie_cat": "Zombikissa",
+  "entity.pet_cemetery.zombie_parrot": "Zombipapukaija",
+  "entity.pet_cemetery.zombie_wolf": "Zombisusi",
+  "item.pet_cemetery.pet_collar": "Lemmikin kaulapanta",
+  "item.pet_cemetery.skeleton_cat_spawn_egg": "Luo luurankokissa",
+  "item.pet_cemetery.skeleton_parrot_spawn_egg": "Luo luurankopapukaija",
+  "item.pet_cemetery.skeleton_wolf_spawn_egg": "Luo luurankosusi",
+  "item.pet_cemetery.zombie_cat_spawn_egg": "Luo zombikissa",
+  "item.pet_cemetery.zombie_parrot_spawn_egg": "Luo zombipapukaija",
+  "item.pet_cemetery.zombie_wolf_spawn_egg": "Luo zombisusi",
+  "tooltip.pet_cemetery.baby": "Poikanen"
+}
