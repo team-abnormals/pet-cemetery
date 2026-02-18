@@ -18,7 +18,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.List;
 
@@ -41,21 +40,20 @@ public class PetCollarItem extends Item {
 
 				if (pet.is(PCEntityTypeTags.CATS)) {
 					ResourceLocation catVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
-					texture = catVariant.getPath();
+					texture = "cat_variant." + catVariant.getNamespace() + "." + catVariant.getPath();
 				}
 
 				if (pet.is(PCEntityTypeTags.PARROTS)) {
-					texture = Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)).getSerializedName();
+					texture = "parrot_variant.minecraft." + Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)).getSerializedName();
 				}
 
 				if (pet.is(PCEntityTypeTags.WOLVES)) {
 					ResourceLocation wolfVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
-					texture = wolfVariant.getPath();
+					texture = "wolf_variant." + wolfVariant.getNamespace() + "." + wolfVariant.getPath();
 				}
 
 
-				texture = texture.replace("_", " ").concat(" ");
-				tooltip.add(Component.literal(WordUtils.capitalize(texture)).withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable(texture).withStyle(ChatFormatting.GRAY));
 			}
 
 			if (tag.getBoolean(PCUtil.IS_CHILD)) {
