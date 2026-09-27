@@ -18,14 +18,22 @@ public class PCDataMapProvider extends DataMapProvider {
 	@Override
 	protected void gather(Provider provider) {
 		this.builder(PCEntityTypes.RESPAWNABLE_PETS)
-				.add(EntityType.WOLF.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_WOLF), false)
-				.add(EntityType.CAT.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_CAT), false)
-				.add(EntityType.PARROT.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_PARROT), false)
-				.add(PCEntityTypes.ZOMBIE_WOLF, new PetRespawn(PCEntityTypes.SKELETON_WOLF), false)
-				.add(PCEntityTypes.ZOMBIE_CAT, new PetRespawn(PCEntityTypes.SKELETON_CAT), false)
-				.add(PCEntityTypes.ZOMBIE_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false)
-				.add(PCEntityTypes.SKELETON_WOLF, new PetRespawn(PCEntityTypes.SKELETON_WOLF), false)
-				.add(PCEntityTypes.SKELETON_CAT, new PetRespawn(PCEntityTypes.SKELETON_CAT), false)
-				.add(PCEntityTypes.SKELETON_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false);
+			.add(EntityType.WOLF.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_WOLF), false)
+			.add(EntityType.CAT.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_CAT), false)
+			.add(EntityType.PARROT.builtInRegistryHolder(), new PetRespawn(PCEntityTypes.ZOMBIE_PARROT), false)
+			.add(PCEntityTypes.ZOMBIE_WOLF, new PetRespawn(PCEntityTypes.SKELETON_WOLF), false)
+			.add(PCEntityTypes.ZOMBIE_CAT, new PetRespawn(PCEntityTypes.SKELETON_CAT), false)
+			.add(PCEntityTypes.ZOMBIE_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false)
+			.add(PCEntityTypes.SKELETON_WOLF, new PetRespawn(PCEntityTypes.SKELETON_WOLF), false)
+			.add(PCEntityTypes.SKELETON_CAT, new PetRespawn(PCEntityTypes.SKELETON_CAT), false)
+			.add(PCEntityTypes.SKELETON_PARROT, new PetRespawn(PCEntityTypes.SKELETON_PARROT), false);
+
+		this.builder(PCEntityTypes.PET_VARIANT_TOOLTIPS)
+			.add(EntityType.WOLF.builtInRegistryHolder(), new PCEntityTypes.VariantTooltip("wolf_variant"), false)
+			.add(PCEntityTypes.ZOMBIE_WOLF, new PCEntityTypes.VariantTooltip("wolf_variant"), false)
+			.add(PCEntityTypes.SKELETON_WOLF, new PCEntityTypes.VariantTooltip("wolf_variant"), false)
+			.add(EntityType.CAT.builtInRegistryHolder(), new PCEntityTypes.VariantTooltip("cat_variant"), false)
+			.add(PCEntityTypes.ZOMBIE_CAT, new PCEntityTypes.VariantTooltip("cat_variant"), false)
+			.add(PCEntityTypes.SKELETON_CAT, new PCEntityTypes.VariantTooltip("cat_variant"), false);
 	}
 }

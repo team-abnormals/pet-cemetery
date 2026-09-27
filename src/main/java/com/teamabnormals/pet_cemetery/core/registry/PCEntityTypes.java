@@ -30,6 +30,7 @@ public class PCEntityTypes {
 	public static final DeferredHolder<EntityType<?>, EntityType<SkeletonParrot>> SKELETON_PARROT = ENTITY_TYPES.createEntity("skeleton_parrot", SkeletonParrot::new, MobCategory.CREATURE, 0.5F, 0.9F);
 
 	public static final DataMapType<EntityType<?>, PetRespawn> RESPAWNABLE_PETS = DataMapType.builder(PetCemetery.location("respawnable_pets"), Registries.ENTITY_TYPE, PetRespawn.CODEC).synced(PetRespawn.RESPAWN_CODEC, false).build();
+	public static final DataMapType<EntityType<?>, VariantTooltip> PET_VARIANT_TOOLTIPS = DataMapType.builder(PetCemetery.location("pet_variant_tooltips"), Registries.ENTITY_TYPE, VariantTooltip.CODEC).build();
 
 	@SubscribeEvent
 	public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -45,14 +46,21 @@ public class PCEntityTypes {
 	@SubscribeEvent
 	public static void registerDataMaps(RegisterDataMapTypesEvent event) {
 		event.register(RESPAWNABLE_PETS);
+		event.register(PET_VARIANT_TOOLTIPS);
 	}
 
 	public record PetRespawn(Holder<EntityType<?>> respawnedAs) {
 		public static final Codec<PetRespawn> RESPAWN_CODEC = RegistryFixedCodec.create(Registries.ENTITY_TYPE).xmap(PetRespawn::new, PetRespawn::respawnedAs);
 
 		public static final Codec<PetRespawn> CODEC = Codec.withAlternative(
-				RecordCodecBuilder.create(in -> in.group(
-						RegistryFixedCodec.create(Registries.ENTITY_TYPE).fieldOf("respawned_as").forGetter(PetRespawn::respawnedAs)).apply(in, PetRespawn::new)),
-				RESPAWN_CODEC);
+			RecordCodecBuilder.create(in -> in.group(
+				RegistryFixedCodec.create(Registries.ENTITY_TYPE).fieldOf("respawned_as").forGetter(PetRespawn::respawnedAs)).apply(in, PetRespawn::new)),
+			RESPAWN_CODEC);
+	}
+
+	public record VariantTooltip(String translationPrefix) {
+		public static final Codec<VariantTooltip> CODEC = RecordCodecBuilder.create(in -> in.group(
+			Codec.STRING.fieldOf("translation_prefix").forGetter(VariantTooltip::translationPrefix)
+		).apply(in, VariantTooltip::new));
 	}
 }

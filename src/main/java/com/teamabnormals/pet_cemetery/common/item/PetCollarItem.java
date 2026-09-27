@@ -4,6 +4,7 @@ import com.teamabnormals.pet_cemetery.core.PetCemetery;
 import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
+import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -35,27 +36,21 @@ public class PetCollarItem extends Item {
 			String petID = tag.getString(PCUtil.PET_ID);
 			EntityType<?> pet = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(petID));
 			tooltip.add(Component.translatable(pet.getDescriptionId()).withStyle(ChatFormatting.GRAY));
-			if (tag.contains(PCUtil.PET_VARIANT)) {
-				String texture = "";
 
-				if (pet.is(PCEntityTypeTags.CATS)) {
-					ResourceLocation catVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
-					texture = "cat_variant." + catVariant.getNamespace() + "." + catVariant.getPath();
-				}
-
-				if (pet.is(PCEntityTypeTags.PARROTS)) {
-					texture = "parrot_variant.minecraft." + Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)).getSerializedName();
-				}
-
-				if (pet.is(PCEntityTypeTags.WOLVES)) {
-					ResourceLocation wolfVariant = ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT));
-					texture = "wolf_variant." + wolfVariant.getNamespace() + "." + wolfVariant.getPath();
-				}
-
-
+			if (pet.is(PCEntityTypeTags.PARROTS) && tag.contains("Variant")) {
+				String texture = "parrot_variant.minecraft." + Parrot.Variant.byId(tag.getInt("Variant")).getSerializedName();
 				tooltip.add(Component.translatable(texture).withStyle(ChatFormatting.GRAY));
+			} else {
+				PCEntityTypes.VariantTooltip variantTooltip = pet.builtInRegistryHolder().getData(PCEntityTypes.PET_VARIANT_TOOLTIPS);
+				if (variantTooltip != null) {
+					String variantKey = tag.contains("variant") ? "variant" : tag.contains("Variant") ? "Variant" : null;
+					if (variantKey != null) {
+						ResourceLocation variant = ResourceLocation.parse(tag.getString(variantKey));
+						String texture = variantTooltip.translationPrefix() + "." + variant.getNamespace() + "." + variant.getPath();
+						tooltip.add(Component.translatable(texture).withStyle(ChatFormatting.GRAY));
+					}
+				}
 			}
-
 			if (tag.getBoolean(PCUtil.IS_CHILD)) {
 				tooltip.add(Component.translatable("tooltip." + PetCemetery.MOD_ID + ".baby").withStyle(ChatFormatting.GRAY));
 			}
@@ -66,7 +61,7 @@ public class PetCollarItem extends Item {
 
 	public int getColor(ItemStack stack) {
 		CompoundTag tag = stack.getOrDefault(PCDataComponents.PET_DATA.get(), CustomData.EMPTY).copyTag();
-		DyeColor color = tag.contains(PCUtil.COLLAR_COLOR) ? DyeColor.byId(tag.getInt(PCUtil.COLLAR_COLOR)) : DyeColor.RED;
+		DyeColor color = tag.contains("CollarColor") ? DyeColor.byId(tag.getInt("CollarColor")) : DyeColor.RED;
 		return color.getTextureDiffuseColor();
 	}
 }

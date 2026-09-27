@@ -9,11 +9,9 @@ import com.teamabnormals.pet_cemetery.core.registry.PCEntityTypes.PetRespawn;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder.Reference;
-import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +24,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
@@ -41,7 +38,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @EventBusSubscriber(modid = PetCemetery.MOD_ID)
 public class PCEvents {
@@ -53,8 +49,7 @@ public class PCEvents {
 		if ((entityType.is(PCEntityTypeTags.ZOMBIE_PETS) || entityType.is(PCEntityTypeTags.SKELETON_PETS)) && entity instanceof TamableAnimal pet) {
 			List<Goal> goalsToRemove = Lists.newArrayList();
 			pet.goalSelector.getAvailableGoals().forEach((goal) -> {
-				if (goal.getGoal() instanceof FloatGoal)
-					goalsToRemove.add(goal.getGoal());
+				if (goal.getGoal() instanceof FloatGoal) goalsToRemove.add(goal.getGoal());
 			});
 			goalsToRemove.forEach(pet.goalSelector::removeGoal);
 		}
@@ -65,31 +60,19 @@ public class PCEvents {
 		LivingEntity entity = event.getEntity();
 		EntityType<?> type = entity.getType();
 
-		if (type.builtInRegistryHolder().getData(PCEntityTypes.RESPAWNABLE_PETS) != null) {
+		if (type.builtInRegistryHolder().getData(PCEntityTypes.RESPAWNABLE_PETS) != null && !entity.level().isClientSide()) {
 			ItemStack collar = new ItemStack(PCItems.PET_COLLAR.get());
 			CompoundTag tag = new CompoundTag();
+			entity.saveWithoutId(tag);
+			stripData(tag);
+
 			tag.putString(PCUtil.PET_ID, BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
-			tag.putBoolean(PCUtil.IS_CHILD, entity.isBaby());
+
 			if (entity.hasCustomName()) {
 				collar.set(DataComponents.CUSTOM_NAME, entity.getCustomName());
 			}
 
-			if (entity instanceof TamableAnimal pet && pet.isTame()) {
-				tag.putString(PCUtil.OWNER_ID, pet.getOwnerUUID().toString());
-				if (entity instanceof Wolf wolf) {
-					String variant = wolf.level().registryAccess().registry(Registries.WOLF_VARIANT).get().getKey(wolf.getVariant().value()).toString();
-					tag.putString(PCUtil.PET_VARIANT, variant);
-					tag.putInt(PCUtil.COLLAR_COLOR, wolf.getCollarColor().getId());
-				} else if (entity instanceof Cat cat) {
-					String variant = cat.level().registryAccess().registry(Registries.CAT_VARIANT).get().getKey(cat.getVariant().value()).toString();
-					tag.putString(PCUtil.PET_VARIANT, variant);
-					tag.putInt(PCUtil.COLLAR_COLOR, cat.getCollarColor().getId());
-				} else if (entity instanceof Parrot parrot) {
-					tag.putInt(PCUtil.PET_VARIANT, parrot.getVariant().getId());
-				}
-				collar.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
-				entity.spawnAtLocation(collar);
-			} else if (entity.getType().is(PCEntityTypeTags.CAN_DROP_COLLAR_UNTAMED)) {
+			if (entity instanceof TamableAnimal pet && pet.isTame() || entity.getType().is(PCEntityTypeTags.CAN_DROP_COLLAR_UNTAMED)) {
 				collar.set(PCDataComponents.PET_DATA.get(), CustomData.of(tag));
 				entity.spawnAtLocation(collar);
 			}
@@ -114,12 +97,8 @@ public class PCEvents {
 				if (entityHolder.isPresent()) {
 					PetRespawn petRespawn = entityHolder.get().getData(PCEntityTypes.RESPAWNABLE_PETS);
 					if (petRespawn != null && petRespawn.respawnedAs().value().create(level) instanceof LivingEntity entity) {
-						UUID owner = tag.contains(PCUtil.OWNER_ID) ? UUID.fromString(tag.getString(PCUtil.OWNER_ID)) : player.getUUID();
-						DyeColor collarColor = DyeColor.byId(tag.getInt(PCUtil.COLLAR_COLOR));
+						entity.load(tag);
 
-						if (entity instanceof AgeableMob ageable) {
-							ageable.setBaby(tag.getBoolean(PCUtil.IS_CHILD));
-						}
 						entity.setPos(offsetPos.getX() + 0.5F, offsetPos.getY(), offsetPos.getZ() + 0.5F);
 						if (stack.has(DataComponents.CUSTOM_NAME)) {
 							entity.setCustomName(stack.getHoverName());
@@ -127,30 +106,6 @@ public class PCEvents {
 
 						if (entity instanceof TamableAnimal pet) {
 							pet.setTame(true, true);
-							pet.setOwnerUUID(owner);
-							switch (pet) {
-								case Cat cat -> {
-									Registry<CatVariant> registry = level.registryAccess().registryOrThrow(Registries.CAT_VARIANT);
-									Optional<Reference<CatVariant>> variant = registry.getHolder(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
-									if (variant.isPresent()) {
-										cat.setVariant(variant.get());
-										cat.setCollarColor(collarColor);
-									}
-								}
-								case Wolf wolf -> {
-									Registry<WolfVariant> registry = level.registryAccess().registryOrThrow(Registries.WOLF_VARIANT);
-									Optional<Reference<WolfVariant>> variant = registry.getHolder(ResourceLocation.parse(tag.getString(PCUtil.PET_VARIANT)));
-									if (variant.isPresent()) {
-										wolf.setVariant(variant.get());
-										wolf.setCollarColor(collarColor);
-									}
-								}
-								case Parrot parrot -> {
-									parrot.setVariant(Parrot.Variant.byId(tag.getInt(PCUtil.PET_VARIANT)));
-								}
-								default -> {
-								}
-							}
 						}
 
 						if (player instanceof ServerPlayer serverPlayer) {
@@ -168,8 +123,7 @@ public class PCEvents {
 
 						level.playSound(player, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
 						level.addFreshEntity(entity);
-						if (!player.getAbilities().instabuild)
-							stack.shrink(1);
+						if (!player.getAbilities().instabuild) stack.shrink(1);
 
 						event.setCanceled(true);
 						event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
@@ -177,5 +131,27 @@ public class PCEvents {
 				}
 			}
 		}
+	}
+
+	public static void stripData(CompoundTag tag) {
+		tag.remove("UUID");
+		tag.remove("Pos");
+		tag.remove("Motion");
+		tag.remove("Rotation");
+		tag.remove("Health");
+		tag.remove("DeathTime");
+		tag.remove("HurtTime");
+		tag.remove("HurtByTimestamp");
+		tag.remove("Air");
+		tag.remove("Fire");
+		tag.remove("PortalCooldown");
+		tag.remove("FallDistance");
+		tag.remove("FallFlying");
+		tag.remove("Brain");
+		tag.remove("Sitting");
+		tag.remove("ArmorItems");
+		tag.remove("HandItems");
+		tag.remove("ArmorDropChances");
+		tag.remove("HandDropChances");
 	}
 }

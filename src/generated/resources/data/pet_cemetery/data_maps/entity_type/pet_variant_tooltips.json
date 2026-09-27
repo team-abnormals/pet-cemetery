@@ -1,0 +1,22 @@
+{
+  "values": {
+    "minecraft:cat": {
+      "translation_prefix": "cat_variant"
+    },
+    "minecraft:wolf": {
+      "translation_prefix": "wolf_variant"
+    },
+    "pet_cemetery:skeleton_cat": {
+      "translation_prefix": "cat_variant"
+    },
+    "pet_cemetery:skeleton_wolf": {
+      "translation_prefix": "wolf_variant"
+    },
+    "pet_cemetery:zombie_cat": {
+      "translation_prefix": "cat_variant"
+    },
+    "pet_cemetery:zombie_wolf": {
+      "translation_prefix": "wolf_variant"
+    }
+  }
+}
