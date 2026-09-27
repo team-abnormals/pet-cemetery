@@ -51,7 +51,7 @@ public class PetCollarItem extends Item {
 					}
 				}
 			}
-			if (tag.getBoolean(PCUtil.IS_CHILD)) {
+			if (tag.getInt("Age") < 0) {
 				tooltip.add(Component.translatable("tooltip." + PetCemetery.MOD_ID + ".baby").withStyle(ChatFormatting.GRAY));
 			}
 		}

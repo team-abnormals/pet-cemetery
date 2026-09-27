@@ -2,7 +2,6 @@ package com.teamabnormals.pet_cemetery.core.data.server;
 
 import com.teamabnormals.pet_cemetery.common.advancement.ConvertedMobTrigger;
 import com.teamabnormals.pet_cemetery.core.PetCemetery;
-import com.teamabnormals.pet_cemetery.core.other.PCUtil;
 import com.teamabnormals.pet_cemetery.core.other.tags.PCEntityTypeTags;
 import com.teamabnormals.pet_cemetery.core.registry.PCDataComponents;
 import com.teamabnormals.pet_cemetery.core.registry.PCItems;
